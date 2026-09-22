@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ---------------------------------------------------------------
+     Brand color tokens — PLACEHOLDER hex values.
+     Swap these once exact brand hex codes are confirmed; every
+     component already references the Tailwind classes (bg-primary,
+     text-ink, etc.) so nothing else needs to change.
+     --------------------------------------------------------------- */
+  --color-primary: #ffd400; /* yellow */
+  --color-accent-pink: #ff2e93;
+  --color-accent-blue: #3357ff;
+  --color-accent-orange: #ff6a1a;
+  --color-ink: #111111; /* near-black */
+  --color-surface: #f3f2ee; /* light gray background */
+  --color-white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-poppins), system-ui, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Visible keyboard focus state — kept bold/on-brand instead of the
+   default thin browser outline. */
+:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

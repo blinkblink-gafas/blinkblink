@@ -48,6 +48,28 @@
     "premiumQuality": "Premium Quality",
     "fastDelivery": "Fast Delivery"
   },
+  "shopByCategory": {
+    "heading": "Shop by Category",
+    "viewAll": "View All",
+    "wishlist": {
+      "add": "Add {category} to wishlist",
+      "remove": "Remove {category} from wishlist"
+    },
+    "categories": {
+      "sunglasses": {
+        "name": "Sunglasses",
+        "description": "Style for every sun"
+      },
+      "eyeglasses": {
+        "name": "Eyeglasses",
+        "description": "Made for your everyday"
+      },
+      "sports": {
+        "name": "Sports",
+        "description": "Move in every moment"
+      }
+    }
+  },
   "productBadges": {
     "New": "New",
     "Bestseller": "Bestseller",

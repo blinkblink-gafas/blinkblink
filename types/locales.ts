@@ -48,6 +48,19 @@ export interface LocaleStrings {
     premiumQuality: string;
     fastDelivery: string;
   };
+  shopByCategory: {
+    heading: string;
+    viewAll: string;
+    wishlist: {
+      add: string;
+      remove: string;
+    };
+    categories: {
+      sunglasses: { name: string; description: string };
+      eyeglasses: { name: string; description: string };
+      sports: { name: string; description: string };
+    };
+  };
   productBadges: {
     New: string;
     Bestseller: string;

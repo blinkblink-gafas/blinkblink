@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
+import ShopByCategory from "@/components/sections/ShopByCategory";
 import { useTranslation } from "@/lib/i18n";
 
 const Home: NextPage = () => {
@@ -19,6 +20,7 @@ const Home: NextPage = () => {
 
       <Navbar />
       <Hero />
+      <ShopByCategory />
     </>
   );
 };

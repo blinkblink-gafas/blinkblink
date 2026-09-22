@@ -1,4 +1,10 @@
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
+import {
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  type ButtonHTMLAttributes,
+  type ReactNode,
+} from "react";
 import { cn } from "@/lib/utils";
 
 export type ButtonVariant = "primary" | "secondary" | "accent" | "ghost";
@@ -9,6 +15,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   icon?: ReactNode;
   iconPosition?: "left" | "right";
+  /** Applies the Button styles to one child, such as a Next.js Link. */
+  asChild?: boolean;
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -40,31 +48,29 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       size = "md",
       icon,
       iconPosition = "left",
+      asChild = false,
       className,
       children,
       ...rest
     },
     ref
   ) => {
-    return (
-      <button
-        ref={ref}
-        className={cn(
-          "inline-flex items-center justify-center font-semibold rounded-pill border-3 border-ink shadow-comic-sm transition-all",
-          "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-comic",
-          "active:translate-x-0 active:translate-y-0 active:shadow-none",
-          "disabled:opacity-50 disabled:pointer-events-none",
-          variantStyles[variant],
-          sizeStyles[size],
-          className
-        )}
-        {...rest}
-      >
-        {icon && iconPosition === "left" && <span className="shrink-0">{icon}</span>}
-        {children}
-        {icon && iconPosition === "right" && <span className="shrink-0">{icon}</span>}
-      </button>
+    const buttonClassName = cn(
+      "inline-flex items-center justify-center font-semibold rounded-pill border-3 border-ink shadow-comic-sm transition-all",
+      "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-comic",
+      "active:translate-x-0 active:translate-y-0 active:shadow-none",
+      "disabled:opacity-50 disabled:pointer-events-none",
+      variantStyles[variant],
+      sizeStyles[size],
+      className
     );
+    const withIcons = (contentChildren: ReactNode) => <>{icon && iconPosition === "left" && <span className="shrink-0">{icon}</span>}{contentChildren}{icon && iconPosition === "right" && <span className="shrink-0">{icon}</span>}</>;
+
+    if (asChild && isValidElement<{ className?: string; children?: ReactNode }>(children)) {
+      return cloneElement(children, { className: cn(buttonClassName, children.props.className), ...rest }, withIcons(children.props.children));
+    }
+
+    return <button ref={ref} className={buttonClassName} {...rest}>{withIcons(children)}</button>;
   }
 );
 

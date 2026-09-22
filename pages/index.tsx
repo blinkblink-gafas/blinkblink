@@ -1,28 +1,24 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Section from "@/components/ui/Section";
+import Navbar from "@/components/layout/Navbar";
+import Hero from "@/components/sections/Hero";
+import { useTranslation } from "@/lib/i18n";
 
-/**
- * Home page scaffold. Sections (Navbar, Hero, product grid, etc.) are
- * intentionally not built yet — this file is just the routed entry point
- * so future section prompts have somewhere to slot in.
- */
 const Home: NextPage = () => {
+  const t = useTranslation();
+
   return (
     <>
       <Head>
-        <title>blink blink — bold eyewear</title>
+        <title>{t.pages.home.title}</title>
         <meta
           name="description"
-          content="blink blink — bold, playful eyewear for Gen-Z."
+          content={t.pages.home.description}
         />
       </Head>
 
-      <Section>
-        <p className="text-body text-ink/60">
-          Home page scaffold — sections coming soon.
-        </p>
-      </Section>
+      <Navbar />
+      <Hero />
     </>
   );
 };

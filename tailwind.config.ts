@@ -12,11 +12,16 @@ const config: Config = {
         // Brand tokens — piped through CSS variables (see styles/globals.css)
         // so hex values can be swapped in one place once confirmed.
         primary: "var(--color-primary)",
+        secondary: "var(--secondary)",
         "accent-pink": "var(--color-accent-pink)",
         "accent-blue": "var(--color-accent-blue)",
         "accent-orange": "var(--color-accent-orange)",
         ink: "var(--color-ink)",
+        black: "var(--black)",
         surface: "var(--color-surface)",
+        background: "var(--background)",
+        "text-primary": "var(--text-primary)",
+        "text-secondary": "var(--text-secondary)",
         white: "var(--color-white)",
       },
       fontFamily: {

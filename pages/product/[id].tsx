@@ -1,21 +1,25 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Section from "@/components/ui/Section";
+import { formatTranslation, useTranslation } from "@/lib/i18n";
 
 interface ProductPageProps {
   id: string;
 }
 
 const ProductPage: NextPage<ProductPageProps> = ({ id }) => {
+  const t = useTranslation();
+  const values = { id };
+
   return (
     <>
       <Head>
-        <title>Product {id} — blink blink</title>
+        <title>{formatTranslation(t.pages.product.title, values)}</title>
       </Head>
 
       <Section>
         <p className="text-body text-ink/60">
-          Product detail scaffold for id &ldquo;{id}&rdquo; — PDP layout coming soon.
+          {formatTranslation(t.pages.product.placeholder, values)}
         </p>
       </Section>
     </>

@@ -1,6 +1,7 @@
 import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 import type { ProductBadgeLabel } from "@/types/product";
+import { useTranslation } from "@/lib/i18n";
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   label: ProductBadgeLabel;
@@ -18,6 +19,8 @@ const badgeStyles: Record<ProductBadgeLabel, string> = {
  * "Bestseller", "Sale", "Limited"). Purely presentational.
  */
 export default function Badge({ label, className, ...rest }: BadgeProps) {
+  const t = useTranslation();
+
   return (
     <span
       className={cn(
@@ -27,7 +30,7 @@ export default function Badge({ label, className, ...rest }: BadgeProps) {
       )}
       {...rest}
     >
-      {label}
+      {t.productBadges[label]}
     </span>
   );
 }

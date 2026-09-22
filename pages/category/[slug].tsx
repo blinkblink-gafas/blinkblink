@@ -1,21 +1,25 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Section from "@/components/ui/Section";
+import { formatTranslation, useTranslation } from "@/lib/i18n";
 
 interface CategoryPageProps {
   slug: string;
 }
 
 const CategoryPage: NextPage<CategoryPageProps> = ({ slug }) => {
+  const t = useTranslation();
+  const values = { category: slug };
+
   return (
     <>
       <Head>
-        <title>{slug} — blink blink</title>
+        <title>{formatTranslation(t.pages.category.title, values)}</title>
       </Head>
 
       <Section>
         <p className="text-body text-ink/60">
-          Category scaffold for &ldquo;{slug}&rdquo; — product grid coming soon.
+          {formatTranslation(t.pages.category.placeholder, values)}
         </p>
       </Section>
     </>

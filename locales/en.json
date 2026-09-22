@@ -1,0 +1,75 @@
+{
+  "common": {
+    "brandName": "blink blink",
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "viewAll": "View All",
+    "shopNow": "Shop Now",
+    "outOfStock": "Out of Stock",
+    "noImage": "No image",
+    "addToWishlist": "Add to wishlist"
+  },
+  "navbar": {
+    "links": {
+      "sunglasses": "Sunglasses",
+      "eyeglasses": "Eyeglasses",
+      "collections": "Collections",
+      "about": "About"
+    },
+    "tagline": "since you wear",
+    "aria": {
+      "mainNavigation": "Main navigation",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "home": "blink blink home",
+      "search": "Search",
+      "account": "Account",
+      "cartWithCount": "Cart, {count} items"
+    }
+  },
+  "hero": {
+    "eyebrow": "New drop",
+    "heading": {
+      "before": "More than eyewear. It's a",
+      "emphasis": "vibe",
+      "after": "."
+    },
+    "subtext": "Stylish. Bold. Made for your everyday.",
+    "cta": "Shop Now",
+    "sticker": {
+      "lineOne": "Good Things",
+      "lineTwo": "Ahead!"
+    },
+    "imageAlt": "Black cat-eye sunglasses"
+  },
+  "trustBadges": {
+    "trendyDesigns": "Trendy Designs",
+    "uvProtection": "UV Protection",
+    "premiumQuality": "Premium Quality",
+    "fastDelivery": "Fast Delivery"
+  },
+  "productBadges": {
+    "New": "New",
+    "Bestseller": "Bestseller",
+    "Sale": "Sale",
+    "Limited": "Limited"
+  },
+  "pages": {
+    "home": {
+      "title": "blink blink — bold eyewear",
+      "description": "blink blink — bold, playful eyewear for Gen-Z."
+    },
+    "about": {
+      "title": "About — blink blink",
+      "placeholder": "About page scaffold — content coming soon."
+    },
+    "category": {
+      "title": "{category} — blink blink",
+      "placeholder": "Category scaffold for “{category}” — product grid coming soon."
+    },
+    "product": {
+      "title": "Product {id} — blink blink",
+      "placeholder": "Product detail scaffold for id “{id}” — PDP layout coming soon."
+    }
+  }
+}

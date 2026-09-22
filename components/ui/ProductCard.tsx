@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 import { formatPrice, cn } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
+import { useTranslation } from "@/lib/i18n";
 
 export interface ProductCardProps {
   product: Product;
@@ -21,6 +22,7 @@ export interface ProductCardProps {
 export default function ProductCard({ product, className }: ProductCardProps) {
   const dispatch = useAppDispatch();
   const primaryImage = product.images[0];
+  const t = useTranslation();
 
   const handleAddToCart = () => {
     dispatch(
@@ -55,7 +57,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-small text-ink/40">
-            No image
+            {t.common.noImage}
           </div>
         )}
 
@@ -71,7 +73,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         {/* Wishlist toggle */}
         <button
           type="button"
-          aria-label="Add to wishlist"
+          aria-label={t.common.addToWishlist}
           className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink bg-white"
         >
           <Heart size={16} />
@@ -109,7 +111,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           )}
         >
           <ShoppingCart size={16} />
-          {product.inStock ? "Add to Cart" : "Out of Stock"}
+          {product.inStock ? t.common.addToCart : t.common.outOfStock}
         </button>
       </div>
     </motion.div>

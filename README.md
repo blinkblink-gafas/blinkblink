@@ -1,14 +1,17 @@
-# blink blink — project foundation
+# blink blink — storefront
 
-Scaffold for the blink blink eyewear landing page. No Navbar, Hero, or
-content sections yet — this is just the base: config, theme tokens,
-folder structure, Redux/RTK Query wiring, and reusable UI primitives.
+Next.js storefront for blink blink eyewear. Live so far: a homepage
+(Navbar, Hero, Shop by Category, a Trending product grid), category
+listing pages, and a full product detail page — all wired to a mock
+product catalog and a working Redux cart. No real backend yet: everything
+reads from `lib/mockData.ts` until a `productsApi` (see RTK Query below)
+replaces it.
 
 ## Getting started
 
 ```bash
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
 Then open http://localhost:3000.
@@ -48,13 +51,31 @@ for the comic-book/streetwear outline look.
 ## Structure
 
 ```
-pages/            index, about, category/[slug], product/[id] — routed scaffolds only
-components/ui/    Button, Badge, Section, ProductCard primitives
-store/            Redux store, apiSlice (RTK Query base), cartSlice
-types/            Product, CartItem, FilterState, etc.
-styles/           globals.css (Tailwind + CSS variable tokens)
-lib/              mockData.ts, utils.ts (formatPrice, cn helper)
+pages/                index (Hero + ShopByCategory + Trending), about (stub),
+                       category/[slug] (product grid, filtered by category),
+                       product/[slug] (full PDP)
+components/layout/     Navbar, Layout (wraps every page via _app.tsx)
+components/sections/   Hero, ShopByCategory, ProductGrid
+components/ui/         Button, Badge, Section, ProductCard, CategoryCard
+store/                 Redux store, apiSlice (RTK Query base), cartSlice
+types/                 Product, CartItem, FilterState, etc.
+styles/                globals.css (Tailwind + CSS variable tokens)
+lib/                   mockData.ts, colors.ts (color-name → swatch hex),
+                       i18n.ts, utils.ts (formatPrice, cn, prettifyLabel)
+public/products/       Local placeholder product imagery (see below)
 ```
+
+## Product imagery
+
+`lib/mockData.ts`'s 12 mock products all point at local SVGs under
+`public/products/` — the same hand-drawn frame illustration used by `Hero`'s
+`SunglassesArt` and `CategoryCard`'s `CategoryEyewear`, just recolored per
+product, so the catalog looks on-brand with zero external image
+dependencies. **These are placeholders, not real product photography** —
+swap each product's `images` array for real shots once they're available;
+no other code needs to change. `next.config.js` allows local SVGs through
+`next/image` for this reason (`dangerouslyAllowSVG`, scoped to our own
+static files only, never user-uploaded content).
 
 ## Redux / RTK Query
 
@@ -77,7 +98,14 @@ lib/              mockData.ts, utils.ts (formatPrice, cn helper)
   padding, and vertical rhythm wrapper for every homepage/category section.
 - **ProductCard** — typed to `Product`, image area, badges, wishlist
   toggle, title, star rating, price + strikethrough MRP, and an
-  "Add to Cart" button wired to `cartSlice`. Layout shell only — no live
-  data yet.
+  "Add to Cart" button wired to `cartSlice`. The whole card links to
+  `/product/[slug]`; the wishlist and Add to Cart buttons sit above that
+  link so they stay independently clickable.
+- **ProductGrid** (`components/sections/`) — takes a `Product[]` and an
+  optional heading/"View All" link, and renders a responsive `ProductCard`
+  grid (an optional `emptyMessage` prop covers an empty list inline; the
+  category page instead renders its own empty state so it can offer a link
+  back home). Used by the homepage's Trending section and every category
+  page with results.
 
-Import all of the above from `@/components/ui`.
+Import the `ui/` primitives from `@/components/ui`.

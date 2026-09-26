@@ -1,13 +1,212 @@
-import type { Product } from "@/types/product";
+import type { Product, ProductCategory } from "@/types/product";
 import type { Category } from "@/types/category";
 import type { LocaleStrings } from "@/types/locales";
 
 /**
- * Placeholder mock product data. Sections built later (Hero, product grid,
- * etc.) can import from here until the real productsApi endpoint is wired
- * up. Kept intentionally small — extend as needed.
+ * Placeholder product catalog. Every image points at a local SVG under
+ * `public/products/` (the same hand-drawn frame illustration style as
+ * `Hero`'s `SunglassesArt` and `CategoryCard`'s `CategoryEyewear`, recolored
+ * per product) rather than stock photography — swap `images` for real product
+ * photography once it's shot; no other field needs to change.
  */
-export const mockProducts: Product[] = [];
+export const mockProducts: Product[] = [
+  {
+    id: "p1",
+    slug: "eclipse-aviator",
+    name: "Eclipse Aviator",
+    category: "sunglasses",
+    price: 38,
+    currency: "USD",
+    rating: 4.6,
+    reviewCount: 128,
+    images: [{ url: "/products/aviator-black.svg", alt: "Eclipse Aviator sunglasses, black lens" }],
+    colors: ["Jet Black", "Tortoise"],
+    badges: ["Bestseller"],
+    inStock: true,
+    description: "The everyday aviator, sharpened. A wide black lens and a featherlight frame that looks as good at brunch as it does on the bike.",
+  },
+  {
+    id: "p2",
+    slug: "solar-flare-cateye",
+    name: "Solar Flare Cat-Eye",
+    category: "sunglasses",
+    price: 42,
+    mrp: 52,
+    currency: "USD",
+    rating: 4.8,
+    reviewCount: 204,
+    images: [{ url: "/products/cateye-black.svg", alt: "Solar Flare Cat-Eye sunglasses, black lens" }],
+    colors: ["Sunset Pink", "Jet Black"],
+    badges: ["Sale", "Bestseller"],
+    inStock: true,
+    description: "Dramatic corners, zero drama. Our best-selling cat-eye, cut a little bolder than the rest of the shelf.",
+  },
+  {
+    id: "p3",
+    slug: "retro-round",
+    name: "Retro Round",
+    category: "sunglasses",
+    price: 34,
+    currency: "USD",
+    rating: 4.3,
+    reviewCount: 76,
+    images: [{ url: "/products/round-amber.svg", alt: "Retro Round sunglasses, amber lens" }],
+    colors: ["Amber", "Jet Black"],
+    badges: ["New"],
+    inStock: true,
+    description: "Small round lenses, big vintage energy. An amber tint that warms up everything you look at.",
+  },
+  {
+    id: "p4",
+    slug: "neon-shield-wrap",
+    name: "Neon Shield Wrap",
+    category: "sunglasses",
+    price: 46,
+    currency: "USD",
+    rating: 4.1,
+    reviewCount: 41,
+    images: [{ url: "/products/shield-blue.svg", alt: "Neon Shield Wrap sunglasses, electric blue lens" }],
+    colors: ["Electric Blue", "Jet Black"],
+    badges: ["Limited"],
+    inStock: false,
+    description: "One continuous shield lens in electric blue. Limited run — once it's gone, it's gone.",
+  },
+  {
+    id: "p5",
+    slug: "bold-square",
+    name: "Bold Square",
+    category: "sunglasses",
+    price: 36,
+    currency: "USD",
+    rating: 4.5,
+    reviewCount: 98,
+    images: [{ url: "/products/square-black.svg", alt: "Bold Square sunglasses, black lens" }],
+    colors: ["Jet Black", "Clear"],
+    inStock: true,
+    description: "Strong square lenses and a wide bridge — built for faces that want a frame that shows up.",
+  },
+  {
+    id: "p6",
+    slug: "mini-oval",
+    name: "Mini Oval",
+    category: "sunglasses",
+    price: 32,
+    mrp: 40,
+    currency: "USD",
+    rating: 4.4,
+    reviewCount: 63,
+    images: [{ url: "/products/oval-rose.svg", alt: "Mini Oval sunglasses, rose lens" }],
+    colors: ["Rose", "Jet Black"],
+    badges: ["Sale"],
+    inStock: true,
+    description: "Petite oval lenses in a soft rose tint. The low-key pair you'll reach for every single day.",
+  },
+  {
+    id: "p7",
+    slug: "clearview-round",
+    name: "Clearview Round",
+    category: "eyeglasses",
+    price: 44,
+    currency: "USD",
+    rating: 4.7,
+    reviewCount: 152,
+    images: [{ url: "/products/round-clear.svg", alt: "Clearview Round eyeglasses, clear lens" }],
+    colors: ["Tortoise", "Jet Black"],
+    badges: ["Bestseller"],
+    inStock: true,
+    description: "A round everyday frame with clear lenses, ready for your own prescription or a blue-light upgrade.",
+  },
+  {
+    id: "p8",
+    slug: "blue-light-square",
+    name: "Blue Light Square",
+    category: "eyeglasses",
+    price: 39,
+    currency: "USD",
+    rating: 4.2,
+    reviewCount: 87,
+    images: [{ url: "/products/square-lightblue.svg", alt: "Blue Light Square eyeglasses, light blue-tint lens" }],
+    colors: ["Clear", "Jet Black"],
+    badges: ["New"],
+    inStock: true,
+    description: "Squared-off and screen-ready. A light blue-light coating built into every lens.",
+  },
+  {
+    id: "p9",
+    slug: "vintage-browline",
+    name: "Vintage Browline",
+    category: "eyeglasses",
+    price: 48,
+    currency: "USD",
+    rating: 4.6,
+    reviewCount: 110,
+    images: [{ url: "/products/browline-gold.svg", alt: "Vintage Browline eyeglasses, gold-tinted lens" }],
+    colors: ["Tortoise", "Gold"],
+    inStock: true,
+    description: "The browline classic, warmed up with a soft gold tint and a slightly thicker top edge.",
+  },
+  {
+    id: "p10",
+    slug: "featherlight-oval",
+    name: "Featherlight Oval",
+    category: "eyeglasses",
+    price: 41,
+    mrp: 50,
+    currency: "USD",
+    rating: 4.0,
+    reviewCount: 29,
+    images: [{ url: "/products/oval-clear.svg", alt: "Featherlight Oval eyeglasses, clear lens" }],
+    colors: ["Jet Black", "Rose"],
+    badges: ["Sale"],
+    inStock: true,
+    description: "Barely-there oval frames that disappear on your face and never slide down your nose.",
+  },
+  {
+    id: "p11",
+    slug: "trailblazer-wrap",
+    name: "Trailblazer Wrap",
+    category: "sports",
+    price: 45,
+    currency: "USD",
+    rating: 4.5,
+    reviewCount: 74,
+    images: [{ url: "/products/sports-blue.svg", alt: "Trailblazer Wrap sports sunglasses, electric blue lens" }],
+    colors: ["Electric Blue", "Jet Black"],
+    badges: ["New"],
+    inStock: true,
+    description: "A locked-in wraparound fit for runs, rides and everything in between. Doesn't budge, doesn't fog.",
+  },
+  {
+    id: "p12",
+    slug: "velocity-shield",
+    name: "Velocity Shield",
+    category: "sports",
+    price: 49,
+    currency: "USD",
+    rating: 4.3,
+    reviewCount: 52,
+    images: [{ url: "/products/sports-yellow.svg", alt: "Velocity Shield sports sunglasses, neon yellow lens" }],
+    colors: ["Neon Yellow", "Jet Black"],
+    badges: ["Limited"],
+    inStock: true,
+    description: "High-visibility neon shield lens with full wraparound coverage for peak-sun training days.",
+  },
+];
+
+export function getProductsByCategory(category: string): Product[] {
+  if (category === "all") return mockProducts;
+  return mockProducts.filter((product) => product.category === (category as ProductCategory));
+}
+
+export function getProductBySlug(slug: string): Product | undefined {
+  return mockProducts.find((product) => product.slug === slug);
+}
+
+export function getFeaturedProducts(limit = 4): Product[] {
+  const featured = mockProducts.filter((product) => product.badges?.includes("Bestseller"));
+  const rest = mockProducts.filter((product) => !featured.includes(product));
+  return [...featured, ...rest].slice(0, limit);
+}
 
 /**
  * Temporary category source until the categories endpoint is available.

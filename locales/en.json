@@ -76,6 +76,24 @@
     "Sale": "Sale",
     "Limited": "Limited"
   },
+  "trending": {
+    "heading": "Trending Now"
+  },
+  "categoryPage": {
+    "backToHome": "Back to home",
+    "emptyHeading": "Nothing here yet",
+    "emptyMessage": "We're still stocking this collection — check back soon.",
+    "resultsLabel": "{count} styles"
+  },
+  "productPage": {
+    "breadcrumbBack": "Back to {category}",
+    "colorLabel": "Color: {color}",
+    "quantityLabel": "Quantity",
+    "reviewsLabel": "{count} reviews",
+    "notFoundHeading": "Product not found",
+    "notFoundMessage": "We couldn't find that product — it may have sold out or moved.",
+    "backToShop": "Back to shop"
+  },
   "pages": {
     "home": {
       "title": "blink blink — bold eyewear",
@@ -86,12 +104,11 @@
       "placeholder": "About page scaffold — content coming soon."
     },
     "category": {
-      "title": "{category} — blink blink",
-      "placeholder": "Category scaffold for “{category}” — product grid coming soon."
+      "title": "{category} — blink blink"
     },
     "product": {
-      "title": "Product {id} — blink blink",
-      "placeholder": "Product detail scaffold for id “{id}” — PDP layout coming soon."
+      "title": "{name} — blink blink",
+      "notFoundTitle": "Product not found — blink blink"
     }
   }
 }

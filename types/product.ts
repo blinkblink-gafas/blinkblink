@@ -1,6 +1,11 @@
 export type ProductBadgeLabel = "New" | "Bestseller" | "Sale" | "Limited";
 
-export type ProductCategory = "sunglasses" | "eyeglasses" | "blue-light" | "accessories";
+export type ProductCategory =
+  | "sunglasses"
+  | "eyeglasses"
+  | "sports"
+  | "blue-light"
+  | "accessories";
 
 export interface ProductImage {
   url: string;

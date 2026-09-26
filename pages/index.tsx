@@ -1,12 +1,14 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import ShopByCategory from "@/components/sections/ShopByCategory";
+import ProductGrid from "@/components/sections/ProductGrid";
+import { getFeaturedProducts } from "@/lib/mockData";
 import { useTranslation } from "@/lib/i18n";
 
 const Home: NextPage = () => {
   const t = useTranslation();
+  const featuredProducts = getFeaturedProducts(4);
 
   return (
     <>
@@ -18,9 +20,15 @@ const Home: NextPage = () => {
         />
       </Head>
 
-      <Navbar />
       <Hero />
       <ShopByCategory />
+      <ProductGrid
+        products={featuredProducts}
+        heading={t.trending.heading}
+        viewAllHref="/category/all"
+        viewAllLabel={t.shopByCategory.viewAll}
+        className="bg-white"
+      />
     </>
   );
 };

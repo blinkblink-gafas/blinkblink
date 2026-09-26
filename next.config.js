@@ -9,6 +9,13 @@ const nextConfig = {
         hostname: "images.unsplash.com",
       },
     ],
+    // Mock product images are local SVGs (public/products/) drawn in the same
+    // style as Hero/CategoryCard, so next/image needs to be allowed to
+    // optimize local SVGs. Safe here because these are our own static files,
+    // never user-uploaded content.
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 

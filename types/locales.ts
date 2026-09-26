@@ -67,10 +67,28 @@ export interface LocaleStrings {
     Sale: string;
     Limited: string;
   };
+  trending: {
+    heading: string;
+  };
+  categoryPage: {
+    backToHome: string;
+    emptyHeading: string;
+    emptyMessage: string;
+    resultsLabel: string;
+  };
+  productPage: {
+    breadcrumbBack: string;
+    colorLabel: string;
+    quantityLabel: string;
+    reviewsLabel: string;
+    notFoundHeading: string;
+    notFoundMessage: string;
+    backToShop: string;
+  };
   pages: {
     home: { title: string; description: string };
     about: { title: string; placeholder: string };
-    category: { title: string; placeholder: string };
-    product: { title: string; placeholder: string };
+    category: { title: string };
+    product: { title: string; notFoundTitle: string };
   };
 }

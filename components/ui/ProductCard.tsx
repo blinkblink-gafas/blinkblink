@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import type { Product } from "@/types/product";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
@@ -14,10 +15,11 @@ export interface ProductCardProps {
 }
 
 /**
- * Layout shell for a product tile: image, badges, title, rating,
- * price (+ strikethrough MRP when discounted), and an Add to Cart
- * button that dispatches into the cart slice. No real product data
- * wired in yet — this is the reusable shape future sections render.
+ * Product tile: image, badges, title, rating, price (+ strikethrough MRP
+ * when discounted), and an Add to Cart button that dispatches into the cart
+ * slice. The whole card links to its product detail page — the wishlist
+ * toggle and Add to Cart button sit above that link (z-20) so they stay
+ * independently clickable instead of triggering navigation.
  */
 export default function ProductCard({ product, className }: ProductCardProps) {
   const dispatch = useAppDispatch();
@@ -41,10 +43,16 @@ export default function ProductCard({ product, className }: ProductCardProps) {
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={cn(
-        "group flex flex-col overflow-hidden rounded-2xl border-3 border-ink bg-white shadow-comic-sm",
+        "group relative flex flex-col overflow-hidden rounded-2xl border-3 border-ink bg-white shadow-comic-sm",
         className
       )}
     >
+      <Link
+        href={`/product/${product.slug}`}
+        aria-label={product.name}
+        className="absolute inset-0 z-10"
+      />
+
       {/* Image area */}
       <div className="relative aspect-square w-full bg-surface">
         {primaryImage ? (
@@ -74,7 +82,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         <button
           type="button"
           aria-label={t.common.addToWishlist}
-          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink bg-white"
+          className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink bg-white"
         >
           <Heart size={16} />
         </button>
@@ -104,7 +112,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           onClick={handleAddToCart}
           disabled={!product.inStock}
           className={cn(
-            "mt-2 inline-flex items-center justify-center gap-2 rounded-pill border-3 border-ink bg-ink px-4 py-2.5 text-body font-semibold text-primary transition-all",
+            "relative z-20 mt-2 inline-flex items-center justify-center gap-2 rounded-pill border-3 border-ink bg-ink px-4 py-2.5 text-body font-semibold text-primary transition-all",
             "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-comic-sm",
             "active:translate-x-0 active:translate-y-0",
             "disabled:opacity-50 disabled:pointer-events-none"

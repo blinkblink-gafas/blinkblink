@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import { Poppins } from "next/font/google";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
+import Layout from "@/components/layout/Layout";
 import "@/styles/globals.css";
 
 const poppins = Poppins({
@@ -15,7 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <main className={`${poppins.variable} font-sans`}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </main>
     </Provider>
   );

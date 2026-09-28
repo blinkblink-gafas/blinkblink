@@ -1,4 +1,4 @@
-import type { Product, ProductCategory } from "@/types/product";
+import type { Product } from "@/types/product";
 import type { Category } from "@/types/category";
 import type { LocaleStrings } from "@/types/locales";
 
@@ -192,21 +192,6 @@ export const mockProducts: Product[] = [
     description: "High-visibility neon shield lens with full wraparound coverage for peak-sun training days.",
   },
 ];
-
-export function getProductsByCategory(category: string): Product[] {
-  if (category === "all") return mockProducts;
-  return mockProducts.filter((product) => product.category === (category as ProductCategory));
-}
-
-export function getProductBySlug(slug: string): Product | undefined {
-  return mockProducts.find((product) => product.slug === slug);
-}
-
-export function getFeaturedProducts(limit = 4): Product[] {
-  const featured = mockProducts.filter((product) => product.badges?.includes("Bestseller"));
-  const rest = mockProducts.filter((product) => !featured.includes(product));
-  return [...featured, ...rest].slice(0, limit);
-}
 
 /**
  * Temporary category source until the categories endpoint is available.

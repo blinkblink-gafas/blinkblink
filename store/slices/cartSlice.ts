@@ -4,12 +4,18 @@ import type { CartItem, CartState } from "@/types/cart";
 const initialState: CartState = {
   items: [],
   isOpen: false,
+  hydrated: false,
 };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    /** Restores items saved in localStorage (see store/persistence.ts). */
+    hydrateCart: (state, action: PayloadAction<CartItem[]>) => {
+      state.items = action.payload;
+      state.hydrated = true;
+    },
     addToCart: (state, action: PayloadAction<Omit<CartItem, "quantity"> & { quantity?: number }>) => {
       const { quantity = 1, ...item } = action.payload;
       const existing = state.items.find(
@@ -21,6 +27,8 @@ const cartSlice = createSlice({
       } else {
         state.items.push({ ...item, quantity });
       }
+      // Opening the drawer confirms the add and keeps checkout one click away.
+      state.isOpen = true;
     },
     removeFromCart: (
       state,
@@ -63,6 +71,7 @@ const cartSlice = createSlice({
 });
 
 export const {
+  hydrateCart,
   addToCart,
   removeFromCart,
   updateQuantity,
@@ -77,6 +86,8 @@ export default cartSlice.reducer;
 // ---- Selectors ----
 export const selectCartItems = (state: { cart: CartState }) => state.cart.items;
 export const selectCartIsOpen = (state: { cart: CartState }) => state.cart.isOpen;
+/** False until saved items have been restored — avoids flashing an empty cart. */
+export const selectCartHydrated = (state: { cart: CartState }) => state.cart.hydrated;
 export const selectCartTotalItems = (state: { cart: CartState }) =>
   state.cart.items.reduce((sum, i) => sum + i.quantity, 0);
 export const selectCartTotalPrice = (state: { cart: CartState }) =>

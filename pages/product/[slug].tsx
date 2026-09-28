@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ChevronLeft, Minus, Plus, ShoppingCart, Star } from "lucide-react";
+import Seo from "@/components/layout/Seo";
+import ProductGrid from "@/components/sections/ProductGrid";
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
-import { getProductBySlug } from "@/lib/mockData";
+import WishlistButton from "@/components/ui/WishlistButton";
+import { getProduct, listProducts, listProductSlugs } from "@/lib/catalog";
 import { getColorSwatch } from "@/lib/colors";
 import { cn, formatPrice } from "@/lib/utils";
 import { formatTranslation, useTranslation } from "@/lib/i18n";
@@ -15,49 +17,46 @@ import { addToCart } from "@/store/slices/cartSlice";
 import type { Product } from "@/types/product";
 
 interface ProductPageProps {
-  product: Product | null;
+  product: Product;
+  related: Product[];
 }
 
-function ProductNotFound() {
-  const t = useTranslation();
-
-  return (
-    <>
-      <Head>
-        <title>{t.pages.product.notFoundTitle}</title>
-      </Head>
-      <Section className="text-center">
-        <h1 className="text-h2 font-bold text-text-primary">{t.productPage.notFoundHeading}</h1>
-        <p className="mx-auto mt-2 max-w-md text-body text-text-secondary">
-          {t.productPage.notFoundMessage}
-        </p>
-        <Link
-          href="/"
-          className="mt-6 inline-block text-small font-semibold text-secondary hover:underline hover:underline-offset-4"
-        >
-          {t.productPage.backToShop}
-        </Link>
-      </Section>
-    </>
-  );
+/** schema.org Product markup so search engines can show price, stock and rating. */
+function productJsonLd(product: Product) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.images.map((image) => image.url),
+    sku: product.id,
+    brand: { "@type": "Brand", name: "blink blink" },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: product.rating,
+      reviewCount: product.reviewCount,
+    },
+    offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: product.currency,
+      availability: product.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+    },
+  };
 }
 
-const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
+function ProductDetail({ product, related }: ProductPageProps) {
   const dispatch = useAppDispatch();
   const t = useTranslation();
 
-  const [selectedColor, setSelectedColor] = useState(product?.colors[0]);
+  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
   const activeImage = useMemo(
-    () => product?.images[activeImageIndex] ?? product?.images[0],
+    () => product.images[activeImageIndex] ?? product.images[0],
     [product, activeImageIndex]
   );
-
-  if (!product) {
-    return <ProductNotFound />;
-  }
 
   const handleAddToCart = () => {
     dispatch(
@@ -74,9 +73,13 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
 
   return (
     <>
-      <Head>
-        <title>{formatTranslation(t.pages.product.title, { name: product.name })}</title>
-      </Head>
+      <Seo
+        title={formatTranslation(t.pages.product.title, { name: product.name })}
+        description={product.description}
+        image={product.images[0]?.url}
+        type="product"
+        jsonLd={productJsonLd(product)}
+      />
 
       <Section>
         <Link
@@ -84,7 +87,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
           className="mb-6 inline-flex items-center gap-1 text-small font-semibold text-text-secondary hover:text-secondary hover:underline hover:underline-offset-4"
         >
           <ChevronLeft size={16} />
-          {formatTranslation(t.productPage.breadcrumbBack, { category: product.category })}
+          {formatTranslation(t.productPage.breadcrumbBack, { category: t.categories[product.category] })}
         </Link>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
@@ -134,7 +137,10 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               </div>
             )}
 
-            <h1 className="text-h2 font-bold text-text-primary">{product.name}</h1>
+            <div className="flex items-start justify-between gap-4">
+              <h1 className="text-h2 font-bold text-text-primary">{product.name}</h1>
+              <WishlistButton productId={product.id} size={20} className="mt-1 h-11 w-11 shrink-0" />
+            </div>
 
             <div className="mt-2 flex items-center gap-1.5 text-body text-text-secondary">
               <Star size={16} className="fill-primary text-ink" />
@@ -186,7 +192,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
               <div className="mt-2 inline-flex items-center gap-4 rounded-pill border-3 border-ink px-4 py-2">
                 <button
                   type="button"
-                  aria-label="Decrease quantity"
+                  aria-label={t.productPage.decreaseQuantity}
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                   className="disabled:opacity-40"
                   disabled={quantity <= 1}
@@ -196,7 +202,7 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
                 <span className="w-4 text-center font-semibold">{quantity}</span>
                 <button
                   type="button"
-                  aria-label="Increase quantity"
+                  aria-label={t.productPage.increaseQuantity}
                   onClick={() => setQuantity((q) => q + 1)}
                 >
                   <Plus size={16} />
@@ -221,17 +227,49 @@ const ProductPage: NextPage<ProductPageProps> = ({ product }) => {
           </div>
         </div>
       </Section>
+
+      {related.length > 0 && (
+        <ProductGrid
+          products={related}
+          heading={t.productPage.relatedHeading}
+          viewAllHref={`/category/${product.category}`}
+          viewAllLabel={t.common.viewAll}
+          className="bg-white"
+        />
+      )}
     </>
   );
-};
+}
 
-export const getServerSideProps: GetServerSideProps<ProductPageProps> = async ({
-  params,
-}) => {
-  const slug = typeof params?.slug === "string" ? params.slug : "";
+/**
+ * Keyed by product so color, quantity and gallery state reset when moving
+ * between products (e.g. via "You might also like") — Next reuses the page
+ * component across same-route navigations.
+ */
+const ProductPage: NextPage<ProductPageProps> = (props) => (
+  <ProductDetail key={props.product.id} {...props} />
+);
+
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: listProductSlugs().map((slug) => ({ params: { slug } })),
+  // Products added after the build are rendered on first request, then cached.
+  fallback: "blocking",
+});
+
+export const getStaticProps: GetStaticProps<ProductPageProps> = async ({ params }) => {
+  const product = getProduct(String(params?.slug));
+
+  if (!product) {
+    return { notFound: true, revalidate: 60 };
+  }
+
+  const related = listProducts({ category: product.category })
+    .filter((candidate) => candidate.id !== product.id)
+    .slice(0, 4);
 
   return {
-    props: { product: getProductBySlug(slug) ?? null },
+    props: { product, related },
+    revalidate: 60,
   };
 };
 

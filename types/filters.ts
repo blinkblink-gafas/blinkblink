@@ -5,10 +5,12 @@ export interface PriceRange {
   max: number;
 }
 
+export type SortOption = "featured" | "price-asc" | "price-desc" | "newest" | "rating";
+
 export interface FilterState {
   categories: ProductCategory[];
   colors: string[];
   priceRange: PriceRange | null;
-  sortBy: "featured" | "price-asc" | "price-desc" | "newest" | "rating";
+  sortBy: SortOption;
   searchQuery: string;
 }

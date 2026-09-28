@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 import { formatPrice, cn } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
+import WishlistButton from "@/components/ui/WishlistButton";
 import { useTranslation } from "@/lib/i18n";
 
 export interface ProductCardProps {
@@ -17,9 +18,10 @@ export interface ProductCardProps {
 /**
  * Product tile: image, badges, title, rating, price (+ strikethrough MRP
  * when discounted), and an Add to Cart button that dispatches into the cart
- * slice. The whole card links to its product detail page — the wishlist
- * toggle and Add to Cart button sit above that link (z-20) so they stay
- * independently clickable instead of triggering navigation.
+ * slice (which also opens the cart drawer). The whole card links to its
+ * product detail page — the wishlist toggle and Add to Cart button sit above
+ * that link (z-20) so they stay independently clickable instead of
+ * triggering navigation.
  */
 export default function ProductCard({ product, className }: ProductCardProps) {
   const dispatch = useAppDispatch();
@@ -79,13 +81,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         )}
 
         {/* Wishlist toggle */}
-        <button
-          type="button"
-          aria-label={t.common.addToWishlist}
-          className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink bg-white"
-        >
-          <Heart size={16} />
-        </button>
+        <WishlistButton productId={product.id} className="absolute right-3 top-3 z-20 h-9 w-9" />
       </div>
 
       {/* Content */}

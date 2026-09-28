@@ -3,15 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --primary: #f7e420;
-  --secondary: #f82b9a;
-  --accent-blue: #06abe9;
-  --accent-orange: #e89d17;
-  --black: #151311;
-  --white: #ffffff;
-  --background: #f5f3f1;
-  --text-primary: #151311;
-  --text-secondary: #5e5b5a;
+  /* Brand colors as space-separated RGB channels — edit these to change a
+     color. Tailwind reads the channels (tailwind.config.ts) so opacity
+     modifiers like `bg-ink/50` and `text-ink/40` work. */
+  --primary-rgb: 247 228 32; /* #f7e420 */
+  --secondary-rgb: 248 43 154; /* #f82b9a */
+  --accent-blue-rgb: 6 171 233; /* #06abe9 */
+  --accent-orange-rgb: 232 157 23; /* #e89d17 */
+  --black-rgb: 21 19 17; /* #151311 */
+  --white-rgb: 255 255 255; /* #ffffff */
+  --background-rgb: 245 243 241; /* #f5f3f1 */
+  --text-primary-rgb: 21 19 17; /* #151311 */
+  --text-secondary-rgb: 94 91 90; /* #5e5b5a */
+
+  --primary: rgb(var(--primary-rgb));
+  --secondary: rgb(var(--secondary-rgb));
+  --accent-blue: rgb(var(--accent-blue-rgb));
+  --accent-orange: rgb(var(--accent-orange-rgb));
+  --black: rgb(var(--black-rgb));
+  --white: rgb(var(--white-rgb));
+  --background: rgb(var(--background-rgb));
+  --text-primary: rgb(var(--text-primary-rgb));
+  --text-secondary: rgb(var(--text-secondary-rgb));
 
   /* Compatibility aliases for the shared UI primitives. */
   --color-primary: var(--primary);

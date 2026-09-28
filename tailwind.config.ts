@@ -1,5 +1,8 @@
 import type { Config } from "tailwindcss";
 
+/** Reads a `--<name>-rgb` channel variable so Tailwind opacity modifiers (`bg-ink/50`) work. */
+const rgb = (name: string) => `rgb(var(--${name}-rgb) / <alpha-value>)`;
+
 const config: Config = {
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -10,19 +13,19 @@ const config: Config = {
     extend: {
       colors: {
         // Brand tokens — piped through CSS variables (see styles/globals.css)
-        // so hex values can be swapped in one place once confirmed.
-        primary: "var(--color-primary)",
-        secondary: "var(--secondary)",
-        "accent-pink": "var(--color-accent-pink)",
-        "accent-blue": "var(--color-accent-blue)",
-        "accent-orange": "var(--color-accent-orange)",
-        ink: "var(--color-ink)",
-        black: "var(--black)",
-        surface: "var(--color-surface)",
-        background: "var(--background)",
-        "text-primary": "var(--text-primary)",
-        "text-secondary": "var(--text-secondary)",
-        white: "var(--color-white)",
+        // so values can be swapped in one place once confirmed.
+        primary: rgb("primary"),
+        secondary: rgb("secondary"),
+        "accent-pink": rgb("secondary"),
+        "accent-blue": rgb("accent-blue"),
+        "accent-orange": rgb("accent-orange"),
+        ink: rgb("black"),
+        black: rgb("black"),
+        surface: rgb("background"),
+        background: rgb("background"),
+        "text-primary": rgb("text-primary"),
+        "text-secondary": rgb("text-secondary"),
+        white: rgb("white"),
       },
       fontFamily: {
         sans: ["var(--font-poppins)", "system-ui", "sans-serif"],

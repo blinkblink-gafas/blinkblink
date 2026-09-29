@@ -9,7 +9,7 @@ import "@/styles/globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["400", "600", "700"], // Regular, SemiBold, Bold
+  weight: ["400", "600", "700", "900"], // Regular, SemiBold, Bold, Black (headlines)
   variable: "--font-poppins",
   display: "swap",
 });

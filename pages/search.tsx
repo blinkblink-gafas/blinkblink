@@ -1,32 +1,25 @@
-import { useMemo } from "react";
 import { useRouter } from "next/router";
 import type { NextPage } from "next";
 import Seo from "@/components/layout/Seo";
-import FilterBar from "@/components/sections/FilterBar";
-import ProductGrid from "@/components/sections/ProductGrid";
+import ProductListing from "@/components/sections/ProductListing";
 import EmptyState from "@/components/ui/EmptyState";
 import Section from "@/components/ui/Section";
 import { useGetProductsQuery } from "@/store/api/productsApi";
-import { applyFilters, collectColors } from "@/lib/filters";
 import { formatCount, formatTranslation, useTranslation } from "@/lib/i18n";
-import { useUrlFilters } from "@/lib/useUrlFilters";
+import { parseFilters } from "@/lib/filters";
 
-/** /search?q=… — results come from `/api/products` via RTK Query, then sort/filter client-side. */
+/** /search?q=… — results come from `/api/products` via RTK Query, then filter/sort client-side. */
 const SearchPage: NextPage = () => {
   const t = useTranslation();
   const router = useRouter();
-  const [filters, setFilters] = useUrlFilters();
-  const query = filters.searchQuery.trim();
+  const query = parseFilters(router.query).searchQuery.trim();
 
   const { data: products = [], isFetching, isError } = useGetProductsQuery(
     { q: query },
     { skip: !router.isReady || !query }
   );
 
-  const availableColors = useMemo(() => collectColors(products), [products]);
-  const visibleProducts = useMemo(() => applyFilters(products, filters), [products, filters]);
-
-  const renderResults = () => {
+  const renderEmptyState = () => {
     // Static page: the ?q= param is only readable once the router is ready.
     if (!router.isReady || isFetching) {
       return (
@@ -35,12 +28,8 @@ const SearchPage: NextPage = () => {
         </p>
       );
     }
-    if (!query) {
-      return <EmptyState heading={t.search.heading} message={t.search.prompt} />;
-    }
-    if (isError) {
-      return <EmptyState heading={t.search.noResultsHeading} message={t.search.error} />;
-    }
+    if (!query) return <EmptyState heading={t.search.heading} message={t.search.prompt} />;
+    if (isError) return <EmptyState heading={t.search.noResultsHeading} message={t.search.error} />;
     if (products.length === 0) {
       return (
         <EmptyState
@@ -54,37 +43,24 @@ const SearchPage: NextPage = () => {
     return null;
   };
 
-  const emptyState = renderResults();
+  const emptyState = renderEmptyState();
 
   return (
     <>
       <Seo title={t.pages.search.title} noIndex />
 
-      <Section className="pb-0 pt-10 md:pb-0 md:pt-12 lg:pb-0 lg:pt-12">
-        <h1 className="text-h2 font-bold text-text-primary">
+      <Section className="pt-8 md:pt-10 lg:pt-10">
+        <h1 className="text-[28px] font-black tracking-[-0.03em] text-text-primary sm:text-[36px]">
           {query ? formatTranslation(t.search.resultsHeading, { query }) : t.search.heading}
         </h1>
         {!emptyState && (
-          <p className="mt-2 text-body text-text-secondary" aria-live="polite">
-            {formatCount(visibleProducts.length, t.categoryPage.resultsLabelOne, t.categoryPage.resultsLabel)}
+          <p className="mt-1 text-body text-text-secondary">
+            {formatCount(products.length, t.categoryPage.resultsLabelOne, t.categoryPage.resultsLabel)}
           </p>
         )}
-      </Section>
 
-      {emptyState ? (
-        <Section>{emptyState}</Section>
-      ) : (
-        <>
-          <FilterBar filters={filters} onChange={setFilters} availableColors={availableColors} />
-          {visibleProducts.length > 0 ? (
-            <ProductGrid products={visibleProducts} className="pt-8 md:pt-10 lg:pt-10" />
-          ) : (
-            <Section>
-              <EmptyState heading={t.filters.noResultsHeading} message={t.filters.noResultsMessage} />
-            </Section>
-          )}
-        </>
-      )}
+        <div className="mt-6">{emptyState ?? <ProductListing products={products} />}</div>
+      </Section>
     </>
   );
 };

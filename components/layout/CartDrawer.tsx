@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import Button from "@/components/ui/Button";
 import CartLineItem from "@/components/ui/CartLineItem";
 import EmptyState from "@/components/ui/EmptyState";
+import FreeShippingProgress from "@/components/ui/FreeShippingProgress";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   closeCart,
@@ -75,15 +76,15 @@ export default function CartDrawer() {
             role="dialog"
             aria-modal="true"
             aria-labelledby="cart-drawer-heading"
-            className="absolute right-0 top-0 flex h-full w-full max-w-md flex-col border-l-3 border-ink bg-white"
+            className="absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-white shadow-2xl"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 320, damping: 34 }}
           >
-            <header className="flex items-center justify-between border-b-3 border-ink px-5 py-4">
+            <header className="flex items-center justify-between border-b border-ink/10 px-5 py-4">
               <div>
-                <h2 id="cart-drawer-heading" className="text-h3 font-bold">
+                <h2 id="cart-drawer-heading" className="text-lg font-black">
                   {t.cart.heading}
                 </h2>
                 {totalItems > 0 && (
@@ -97,7 +98,7 @@ export default function CartDrawer() {
                 type="button"
                 aria-label={t.cart.closeDrawer}
                 onClick={() => dispatch(closeCart())}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-ink transition-colors hover:bg-primary"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-surface"
               >
                 <X size={20} />
               </button>
@@ -114,14 +115,15 @@ export default function CartDrawer() {
               </div>
             ) : (
               <>
+                <FreeShippingProgress subtotal={totalPrice} />
                 <ul className="flex-1 divide-y divide-ink/10 overflow-y-auto px-5">
                   {items.map((item) => (
                     <CartLineItem key={`${item.productId}-${item.color ?? ""}`} item={item} compact />
                   ))}
                 </ul>
 
-                <footer className="border-t-3 border-ink px-5 py-5">
-                  <div className="flex items-center justify-between text-h3">
+                <footer className="border-t border-ink/10 px-5 py-5">
+                  <div className="flex items-center justify-between text-lg">
                     <span>{t.cart.subtotal}</span>
                     <span className="font-bold">{formatPrice(totalPrice)}</span>
                   </div>
@@ -131,7 +133,7 @@ export default function CartDrawer() {
                   </Button>
                   <Link
                     href="/cart"
-                    className="mt-3 block text-center text-small font-semibold text-secondary hover:underline hover:underline-offset-4"
+                    className="mt-3 block text-center text-small font-semibold text-text-primary hover:underline hover:underline-offset-4"
                   >
                     {t.cart.viewCart}
                   </Link>

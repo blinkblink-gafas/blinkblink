@@ -4,13 +4,14 @@
     "addToCart": "Add to Cart",
     "buyNow": "Buy Now",
     "viewAll": "View All",
-    "shopNow": "Shop Now",
     "outOfStock": "Out of Stock",
     "noImage": "No image",
     "addToWishlist": "Add to wishlist",
     "removeFromWishlist": "Remove from wishlist",
     "close": "Close",
-    "remove": "Remove"
+    "remove": "Remove",
+    "discount": "-{percent}%",
+    "home": "Home"
   },
   "navbar": {
     "links": {
@@ -20,7 +21,6 @@
       "shopAll": "Shop All",
       "about": "About"
     },
-    "tagline": "since you wear",
     "aria": {
       "mainNavigation": "Main navigation",
       "openMenu": "Open menu",
@@ -38,33 +38,38 @@
     }
   },
   "hero": {
-    "eyebrow": "New drop",
     "heading": {
-      "before": "More than eyewear. It's a",
-      "emphasis": "vibe",
-      "after": "."
+      "lineOne": "More than eyewear.",
+      "lineTwo": "It's a vibe."
     },
     "subtext": "Stylish. Bold. Made for your everyday.",
     "cta": "Shop Now",
     "sticker": {
-      "lineOne": "Good Things",
-      "lineTwo": "Ahead!"
-    },
-    "imageAlt": "Black cat-eye sunglasses"
+      "lineOne": "Good things",
+      "lineTwo": "ahead"
+    }
   },
   "trustBadges": {
-    "trendyDesigns": "Trendy Designs",
-    "uvProtection": "UV Protection",
-    "premiumQuality": "Premium Quality",
-    "fastDelivery": "Fast Delivery"
+    "trendyDesigns": {
+      "title": "Trendy Designs",
+      "subtitle": "For every mood"
+    },
+    "uvProtection": {
+      "title": "UV Protection",
+      "subtitle": "See the brighter side"
+    },
+    "premiumQuality": {
+      "title": "Premium Quality",
+      "subtitle": "Built to last"
+    },
+    "freeDelivery": {
+      "title": "Free Delivery",
+      "subtitle": "On orders over {amount}"
+    }
   },
   "shopByCategory": {
     "heading": "Shop by Category",
     "viewAll": "View All",
-    "wishlist": {
-      "add": "Add {category} to wishlist",
-      "remove": "Remove {category} from wishlist"
-    },
     "categories": {
       "sunglasses": {
         "name": "Sunglasses",
@@ -72,11 +77,11 @@
       },
       "eyeglasses": {
         "name": "Eyeglasses",
-        "description": "Made for your everyday"
+        "description": "Clear vision, bold style"
       },
       "sports": {
         "name": "Sports",
-        "description": "Move in every moment"
+        "description": "Performance meets style"
       }
     }
   },
@@ -86,24 +91,52 @@
     "Sale": "Sale",
     "Limited": "Limited"
   },
-  "trending": {
-    "heading": "Trending Now"
-  },
   "categoryPage": {
     "emptyHeading": "Nothing here yet",
     "emptyMessage": "We're still stocking this collection — check back soon.",
     "resultsLabel": "{count} styles",
     "resultsLabelOne": "1 style",
-    "browseAll": "Browse all styles"
+    "browseAll": "Browse all styles",
+    "subtitles": {
+      "all": "Every frame we make. Find your perfect pair.",
+      "sunglasses": "Style for every sun. Find your perfect pair.",
+      "eyeglasses": "Clear vision, bold style. Find your perfect pair.",
+      "sports": "Performance meets style. Built to keep up.",
+      "blue-light": "Kinder on your eyes during long screen days.",
+      "accessories": "The finishing touches."
+    },
+    "breadcrumb": "Breadcrumb"
   },
   "productPage": {
-    "breadcrumbBack": "Back to {category}",
-    "colorLabel": "Color: {color}",
+    "frameColor": "Frame Color",
     "quantityLabel": "Quantity",
     "reviewsLabel": "{count} reviews",
     "decreaseQuantity": "Decrease quantity",
     "increaseQuantity": "Increase quantity",
-    "relatedHeading": "You might also like"
+    "relatedHeading": "You might also like",
+    "youSave": "You save {amount} ({percent}%)",
+    "showImage": "Show image {index}",
+    "tabs": {
+      "details": "Details",
+      "shipping": "Shipping",
+      "returns": "Returns"
+    },
+    "shippingText": "Free delivery on orders over {amount}. Smaller orders get a flat shipping rate, shown at checkout.",
+    "returnsText": "Changed your mind? Send unworn frames back within {days} days for a full refund.",
+    "trust": {
+      "freeDelivery": {
+        "title": "Free Delivery",
+        "subtitle": "On orders over {amount}"
+      },
+      "easyReturns": {
+        "title": "Easy Returns",
+        "subtitle": "{days}-day return policy"
+      },
+      "secureCheckout": {
+        "title": "Secure Checkout",
+        "subtitle": "Your details stay private"
+      }
+    }
   },
   "pages": {
     "home": {
@@ -151,7 +184,7 @@
     "accessories": "Accessories"
   },
   "filters": {
-    "heading": "Filter",
+    "heading": "Filters",
     "sortLabel": "Sort by",
     "sort": {
       "featured": "Featured",
@@ -160,17 +193,28 @@
       "newest": "Newest",
       "rating": "Top rated"
     },
-    "colorLabel": "Color",
-    "priceLabel": "Price",
-    "price": {
-      "0-35": "Under $35",
-      "35-45": "$35 – $45",
-      "45-up": "$45 & up"
+    "shapeTabs": "Frame shape",
+    "price": "Price",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "frameColor": "Frame Color",
+    "lensColor": "Lens Color",
+    "frameShape": "Frame Shape",
+    "gender": "Gender",
+    "genders": {
+      "men": "Men",
+      "women": "Women",
+      "unisex": "Unisex"
     },
-    "anyPrice": "Any price",
-    "clear": "Clear filters",
+    "availability": "Availability",
+    "inStock": "In Stock",
+    "clear": "Clear all",
+    "open": "Filters",
+    "openWithCount": "Filters ({count})",
+    "close": "Close filters",
+    "showResults": "Show {count} results",
     "noResultsHeading": "No matches",
-    "noResultsMessage": "Nothing matches those filters — try removing one."
+    "noResultsMessage": "Nothing matches those filters. Try removing one."
   },
   "cart": {
     "heading": "Your Cart",
@@ -187,7 +231,9 @@
     "removeItem": "Remove {name} from cart",
     "decreaseItem": "Decrease quantity of {name}",
     "increaseItem": "Increase quantity of {name}",
-    "colorLabel": "Color: {color}"
+    "colorLabel": "Color: {color}",
+    "freeShippingProgress": "You're {amount} away from free delivery",
+    "freeShippingUnlocked": "You've unlocked free delivery"
   },
   "checkout": {
     "heading": "Checkout",
@@ -238,7 +284,8 @@
   "footer": {
     "tagline": "Bold, playful eyewear for every day.",
     "shopHeading": "Shop",
-    "helpHeading": "blink blink",
+    "helpHeading": "Help",
+    "companyHeading": "Company",
     "links": {
       "about": "About us",
       "wishlist": "Wishlist",
@@ -270,5 +317,48 @@
     "heading": "Lost your glasses?",
     "message": "We couldn't find that page — it may have moved or never existed.",
     "back": "Back to home"
+  },
+  "bestSellers": {
+    "heading": "Best Sellers"
+  },
+  "promo": {
+    "heading": {
+      "lineOne": "Wear Your",
+      "lineTwo": "Personality"
+    },
+    "cta": "Explore Collection"
+  },
+  "newsletter": {
+    "heading": "Join the Blink Club",
+    "body": "Get exclusive drops, offers and style inspiration.",
+    "emailLabel": "Email address",
+    "placeholder": "Enter your email address",
+    "submit": "Subscribe",
+    "success": "You're in! Watch your inbox for the next drop.",
+    "invalidEmail": "Enter a valid email address"
+  },
+  "shapes": {
+    "all": "All",
+    "aviator": "Aviator",
+    "wayfarer": "Wayfarer",
+    "round": "Round",
+    "square": "Square",
+    "rectangle": "Rectangle",
+    "cat-eye": "Cat Eye",
+    "sport": "Sport"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page",
+    "page": "Page {page}"
+  },
+  "brighterSide": {
+    "heading": {
+      "lineOne": "See the",
+      "lineTwo": "Brighter",
+      "lineThree": "Side"
+    },
+    "cta": "Shop sunglasses"
   }
 }

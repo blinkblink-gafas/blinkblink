@@ -1,5 +1,10 @@
 import type { SortOption } from "@/types/filters";
-import type { ProductCategory } from "@/types/product";
+import type { FrameShape, ProductCategory, ProductGender } from "@/types/product";
+
+interface TitledText {
+  title: string;
+  subtitle: string;
+}
 
 export interface LocaleStrings {
   common: {
@@ -7,13 +12,14 @@ export interface LocaleStrings {
     addToCart: string;
     buyNow: string;
     viewAll: string;
-    shopNow: string;
     outOfStock: string;
     noImage: string;
     addToWishlist: string;
     removeFromWishlist: string;
     close: string;
     remove: string;
+    discount: string;
+    home: string;
   };
   navbar: {
     links: {
@@ -23,7 +29,6 @@ export interface LocaleStrings {
       shopAll: string;
       about: string;
     };
-    tagline: string;
     aria: {
       mainNavigation: string;
       openMenu: string;
@@ -43,33 +48,20 @@ export interface LocaleStrings {
   /** Display names for every category slug, including the "all" listing. */
   categories: Record<"all" | ProductCategory, string>;
   hero: {
-    eyebrow: string;
-    heading: {
-      before: string;
-      emphasis: string;
-      after: string;
-    };
+    heading: { lineOne: string; lineTwo: string };
     subtext: string;
     cta: string;
-    sticker: {
-      lineOne: string;
-      lineTwo: string;
-    };
-    imageAlt: string;
+    sticker: { lineOne: string; lineTwo: string };
   };
   trustBadges: {
-    trendyDesigns: string;
-    uvProtection: string;
-    premiumQuality: string;
-    fastDelivery: string;
+    trendyDesigns: TitledText;
+    uvProtection: TitledText;
+    premiumQuality: TitledText;
+    freeDelivery: TitledText;
   };
   shopByCategory: {
     heading: string;
     viewAll: string;
-    wishlist: {
-      add: string;
-      remove: string;
-    };
     categories: {
       sunglasses: { name: string; description: string };
       eyeglasses: { name: string; description: string };
@@ -82,8 +74,21 @@ export interface LocaleStrings {
     Sale: string;
     Limited: string;
   };
-  trending: {
+  bestSellers: {
     heading: string;
+  };
+  promo: {
+    heading: { lineOne: string; lineTwo: string };
+    cta: string;
+  };
+  newsletter: {
+    heading: string;
+    body: string;
+    emailLabel: string;
+    placeholder: string;
+    submit: string;
+    success: string;
+    invalidEmail: string;
   };
   categoryPage: {
     emptyHeading: string;
@@ -91,28 +96,60 @@ export interface LocaleStrings {
     resultsLabel: string;
     resultsLabelOne: string;
     browseAll: string;
+    breadcrumb: string;
+    subtitles: Record<"all" | ProductCategory, string>;
+  };
+  shapes: Record<"all" | FrameShape, string>;
+  filters: {
+    heading: string;
+    sortLabel: string;
+    sort: Record<SortOption, string>;
+    shapeTabs: string;
+    price: string;
+    minPrice: string;
+    maxPrice: string;
+    frameColor: string;
+    lensColor: string;
+    frameShape: string;
+    gender: string;
+    genders: Record<ProductGender, string>;
+    availability: string;
+    inStock: string;
+    clear: string;
+    open: string;
+    openWithCount: string;
+    close: string;
+    showResults: string;
+    noResultsHeading: string;
+    noResultsMessage: string;
+  };
+  pagination: {
+    label: string;
+    previous: string;
+    next: string;
+    page: string;
   };
   productPage: {
-    breadcrumbBack: string;
-    colorLabel: string;
+    frameColor: string;
     quantityLabel: string;
     reviewsLabel: string;
     decreaseQuantity: string;
     increaseQuantity: string;
     relatedHeading: string;
+    youSave: string;
+    showImage: string;
+    tabs: { details: string; shipping: string; returns: string };
+    shippingText: string;
+    returnsText: string;
+    trust: {
+      freeDelivery: TitledText;
+      easyReturns: TitledText;
+      secureCheckout: TitledText;
+    };
   };
-  filters: {
-    heading: string;
-    sortLabel: string;
-    sort: Record<SortOption, string>;
-    colorLabel: string;
-    priceLabel: string;
-    /** Keyed by the price bucket's URL value (see PRICE_BUCKETS in lib/filters.ts). */
-    price: Record<string, string>;
-    anyPrice: string;
-    clear: string;
-    noResultsHeading: string;
-    noResultsMessage: string;
+  brighterSide: {
+    heading: { lineOne: string; lineTwo: string; lineThree: string };
+    cta: string;
   };
   cart: {
     heading: string;
@@ -130,6 +167,8 @@ export interface LocaleStrings {
     decreaseItem: string;
     increaseItem: string;
     colorLabel: string;
+    freeShippingProgress: string;
+    freeShippingUnlocked: string;
   };
   checkout: {
     heading: string;
@@ -181,6 +220,7 @@ export interface LocaleStrings {
     tagline: string;
     shopHeading: string;
     helpHeading: string;
+    companyHeading: string;
     links: {
       about: string;
       wishlist: string;

@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_FILTERS,
-  PRICE_BUCKETS,
   applyFilters,
-  collectColors,
+  collectValues,
+  countActiveFilters,
   filtersToQuery,
+  paginate,
   parseFilters,
+  priceBounds,
 } from "@/lib/filters";
+import type { FilterState } from "@/types/filters";
 import type { Product } from "@/types/product";
 
 const product = (overrides: Partial<Product>): Product => ({
@@ -15,38 +18,58 @@ const product = (overrides: Partial<Product>): Product => ({
   name: "X",
   category: "sunglasses",
   price: 40,
-  currency: "USD",
+  currency: "EUR",
   rating: 4,
   reviewCount: 1,
   images: [],
   colors: ["Jet Black"],
+  lensColors: ["Black"],
+  shape: "square",
+  gender: "unisex",
+  features: [],
   inStock: true,
   ...overrides,
 });
 
 const products = [
-  product({ id: "a", price: 38, rating: 4.6, colors: ["Jet Black", "Tortoise"] }),
-  product({ id: "b", price: 32, rating: 4.4, colors: ["Rose"], badges: ["New"] }),
-  product({ id: "c", price: 46, rating: 4.8, colors: ["Electric Blue", "Jet Black"], category: "sports" }),
+  product({ id: "a", price: 38, rating: 4.6, colors: ["Jet Black", "Tortoise"], shape: "wayfarer", gender: "men" }),
+  product({ id: "b", price: 32, rating: 4.4, colors: ["Gold"], lensColors: ["Green"], shape: "round", badges: ["New"], gender: "women" }),
+  product({ id: "c", price: 46, rating: 4.8, colors: ["Jet Black"], shape: "sport", inStock: false }),
 ];
 
 const ids = (list: Product[]) => list.map((p) => p.id);
+const withFilters = (patch: Partial<FilterState>) => ids(applyFilters(products, { ...DEFAULT_FILTERS, ...patch }));
 
 describe("parseFilters / filtersToQuery", () => {
-  it("round-trips through the URL query", () => {
-    const query = { sort: "price-asc", color: "Jet Black,Rose", price: "35-45", q: "aviator" };
+  it("round-trips every filter through the URL query", () => {
+    const query = {
+      q: "gold",
+      shape: "round,square",
+      color: "Jet Black,Gold",
+      lens: "Green",
+      gender: "women",
+      price: "30-45",
+      stock: "1",
+      sort: "price-asc",
+      page: "2",
+    };
     const filters = parseFilters(query);
-    expect(filters).toMatchObject({
+    expect(filters).toEqual({
+      searchQuery: "gold",
+      shapes: ["round", "square"],
+      frameColors: ["Jet Black", "Gold"],
+      lensColors: ["Green"],
+      genders: ["women"],
+      priceRange: { min: 30, max: 45 },
+      inStockOnly: true,
       sortBy: "price-asc",
-      colors: ["Jet Black", "Rose"],
-      priceRange: PRICE_BUCKETS["35-45"],
-      searchQuery: "aviator",
+      page: 2,
     });
     expect(filtersToQuery(filters)).toEqual(query);
   });
 
-  it("ignores unknown values and omits defaults", () => {
-    const filters = parseFilters({ sort: "bogus", price: "1-2", color: "" });
+  it("drops unknown values and omits defaults", () => {
+    const filters = parseFilters({ sort: "bogus", shape: "blob", gender: "robot", price: "50-10", page: "0", stock: "yes" });
     expect(filters).toEqual(DEFAULT_FILTERS);
     expect(filtersToQuery(filters)).toEqual({});
   });
@@ -58,31 +81,31 @@ describe("parseFilters / filtersToQuery", () => {
 
 describe("applyFilters", () => {
   it("keeps catalog order for 'featured'", () => {
-    expect(ids(applyFilters(products, DEFAULT_FILTERS))).toEqual(["a", "b", "c"]);
+    expect(withFilters({})).toEqual(["a", "b", "c"]);
   });
 
   it("sorts by price, rating and newness", () => {
-    const sort = (sortBy: typeof DEFAULT_FILTERS.sortBy) => ids(applyFilters(products, { ...DEFAULT_FILTERS, sortBy }));
-    expect(sort("price-asc")).toEqual(["b", "a", "c"]);
-    expect(sort("price-desc")).toEqual(["c", "a", "b"]);
-    expect(sort("rating")).toEqual(["c", "a", "b"]);
-    expect(sort("newest")).toEqual(["b", "a", "c"]);
+    expect(withFilters({ sortBy: "price-asc" })).toEqual(["b", "a", "c"]);
+    expect(withFilters({ sortBy: "price-desc" })).toEqual(["c", "a", "b"]);
+    expect(withFilters({ sortBy: "rating" })).toEqual(["c", "a", "b"]);
+    expect(withFilters({ sortBy: "newest" })).toEqual(["b", "a", "c"]);
   });
 
-  it("filters by any selected color", () => {
-    expect(ids(applyFilters(products, { ...DEFAULT_FILTERS, colors: ["Tortoise", "Rose"] }))).toEqual(["a", "b"]);
+  it("matches any selected value within a filter", () => {
+    expect(withFilters({ frameColors: ["Tortoise", "Gold"] })).toEqual(["a", "b"]);
+    expect(withFilters({ shapes: ["round", "sport"] })).toEqual(["b", "c"]);
+    expect(withFilters({ lensColors: ["Green"] })).toEqual(["b"]);
+    expect(withFilters({ genders: ["men"] })).toEqual(["a"]);
   });
 
-  it("filters by price bucket, lower bound inclusive", () => {
-    const within = (key: string) =>
-      ids(applyFilters(products, { ...DEFAULT_FILTERS, priceRange: PRICE_BUCKETS[key] ?? null }));
-    expect(within("0-35")).toEqual(["b"]);
-    expect(within("35-45")).toEqual(["a"]);
-    expect(within("45-up")).toEqual(["c"]);
+  it("combines filters with AND", () => {
+    expect(withFilters({ frameColors: ["Jet Black"], shapes: ["sport"] })).toEqual(["c"]);
+    expect(withFilters({ frameColors: ["Gold"], genders: ["men"] })).toEqual([]);
   });
 
-  it("filters by category", () => {
-    expect(ids(applyFilters(products, { ...DEFAULT_FILTERS, categories: ["sports"] }))).toEqual(["c"]);
+  it("filters by an inclusive price range and by stock", () => {
+    expect(withFilters({ priceRange: { min: 32, max: 38 } })).toEqual(["a", "b"]);
+    expect(withFilters({ inStockOnly: true })).toEqual(["a", "b"]);
   });
 
   it("does not mutate the input", () => {
@@ -92,8 +115,36 @@ describe("applyFilters", () => {
   });
 });
 
-describe("collectColors", () => {
-  it("lists each color once in first-seen order", () => {
-    expect(collectColors(products)).toEqual(["Jet Black", "Tortoise", "Rose", "Electric Blue"]);
+describe("countActiveFilters", () => {
+  it("counts filters but not sort, search or page", () => {
+    expect(countActiveFilters({ ...DEFAULT_FILTERS, sortBy: "rating", searchQuery: "x", page: 3 })).toBe(0);
+    expect(
+      countActiveFilters({ ...DEFAULT_FILTERS, shapes: ["round"], frameColors: ["Gold", "Silver"], inStockOnly: true, priceRange: { min: 1, max: 2 } })
+    ).toBe(5);
+  });
+});
+
+describe("paginate", () => {
+  const items = Array.from({ length: 20 }, (_, i) => i + 1);
+
+  it("slices the requested page", () => {
+    expect(paginate(items, 2, 9)).toEqual({ items: [10, 11, 12, 13, 14, 15, 16, 17, 18], page: 2, totalPages: 3 });
+  });
+
+  it("clamps out-of-range pages", () => {
+    expect(paginate(items, 99, 9).page).toBe(3);
+    expect(paginate(items, 0, 9).page).toBe(1);
+    expect(paginate([], 1, 9)).toEqual({ items: [], page: 1, totalPages: 1 });
+  });
+});
+
+describe("priceBounds / collectValues", () => {
+  it("covers every price in whole euros", () => {
+    expect(priceBounds(products)).toEqual({ min: 32, max: 46 });
+    expect(priceBounds([product({ price: 19.5 }), product({ price: 20.2 })])).toEqual({ min: 19, max: 21 });
+  });
+
+  it("lists each value once in first-seen order", () => {
+    expect(collectValues(products, (p) => p.colors)).toEqual(["Jet Black", "Tortoise", "Gold"]);
   });
 });

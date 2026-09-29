@@ -51,7 +51,7 @@ const WishlistPage: NextPage = () => {
       ) : (
         <>
           <Section className="pb-0 pt-10 md:pb-0 md:pt-12 lg:pb-0 lg:pt-12">
-            <h1 className="text-h2 font-bold text-text-primary">{t.wishlist.heading}</h1>
+            <h1 className="text-[28px] font-black tracking-[-0.03em] text-text-primary sm:text-[36px]">{t.wishlist.heading}</h1>
           </Section>
           <ProductGrid products={wishlisted} className="pt-8 md:pt-10 lg:pt-10" />
         </>

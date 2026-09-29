@@ -24,13 +24,18 @@ export const EMPTY_CHECKOUT_FORM: CheckoutForm = {
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/** Loose shape check (something@something.tld); the mail provider does the real verification. */
+export function isValidEmail(email: string): boolean {
+  return EMAIL_PATTERN.test(email.trim());
+}
+
 /** Every field is required; email must look like an address. Returns only failing fields. */
 export function validateCheckout(form: CheckoutForm, strings: LocaleStrings["checkout"]): CheckoutErrors {
   const errors: CheckoutErrors = {};
   for (const field of CHECKOUT_FIELDS) {
     if (!form[field].trim()) errors[field] = strings.required;
   }
-  if (!errors.email && !EMAIL_PATTERN.test(form.email.trim())) {
+  if (!errors.email && !isValidEmail(form.email)) {
     errors.email = strings.invalidEmail;
   }
   return errors;

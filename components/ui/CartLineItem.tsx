@@ -27,7 +27,7 @@ export default function CartLineItem({ item, compact = false }: CartLineItemProp
     <li className="flex gap-4 py-4">
       <div
         className={cn(
-          "relative shrink-0 overflow-hidden rounded-xl border-2 border-ink bg-surface",
+          "relative shrink-0 overflow-hidden rounded-xl bg-surface",
           compact ? "h-20 w-20" : "h-24 w-24 sm:h-28 sm:w-28"
         )}
       >
@@ -48,7 +48,7 @@ export default function CartLineItem({ item, compact = false }: CartLineItemProp
         </div>
 
         <div className="mt-auto flex items-center justify-between pt-2">
-          <div className="inline-flex items-center gap-3 rounded-pill border-2 border-ink px-3 py-1">
+          <div className="inline-flex items-center gap-3 rounded-pill px-3 py-1 ring-1 ring-inset ring-ink/15">
             <button
               type="button"
               aria-label={formatTranslation(t.cart.decreaseItem, nameValues)}
@@ -74,7 +74,7 @@ export default function CartLineItem({ item, compact = false }: CartLineItemProp
             type="button"
             aria-label={formatTranslation(t.cart.removeItem, nameValues)}
             onClick={() => dispatch(removeFromCart(key))}
-            className="inline-flex items-center gap-1 text-small text-text-secondary transition-colors hover:text-secondary"
+            className="inline-flex items-center gap-1 text-small text-text-secondary transition-colors hover:text-accent-pink"
           >
             <Trash2 size={16} />
             {!compact && <span>{t.common.remove}</span>}

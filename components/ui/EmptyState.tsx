@@ -30,7 +30,7 @@ export default function EmptyState({
 
   return (
     <div className={cn("flex flex-col items-center py-8 text-center", className)}>
-      <Heading className={cn("font-bold text-text-primary", isPageHeading ? "text-h2" : "text-h3")}>
+      <Heading className={cn("font-bold text-text-primary", isPageHeading ? "text-[28px] font-black tracking-[-0.02em]" : "text-xl")}>
         {heading}
       </Heading>
       {message && <p className="mt-2 max-w-md text-body text-text-secondary">{message}</p>}

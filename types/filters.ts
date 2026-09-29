@@ -1,4 +1,4 @@
-import type { ProductCategory } from "@/types/product";
+import type { FrameShape, ProductGender } from "@/types/product";
 
 export interface PriceRange {
   min: number;
@@ -8,9 +8,15 @@ export interface PriceRange {
 export type SortOption = "featured" | "price-asc" | "price-desc" | "newest" | "rating";
 
 export interface FilterState {
-  categories: ProductCategory[];
-  colors: string[];
+  shapes: FrameShape[];
+  frameColors: string[];
+  lensColors: string[];
+  genders: ProductGender[];
+  /** Inclusive price bounds; null means "any price". */
   priceRange: PriceRange | null;
+  inStockOnly: boolean;
   sortBy: SortOption;
   searchQuery: string;
+  /** 1-based results page. */
+  page: number;
 }

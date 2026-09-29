@@ -9,7 +9,7 @@
   --primary-rgb: 247 228 32; /* #f7e420 */
   --secondary-rgb: 248 43 154; /* #f82b9a */
   --accent-blue-rgb: 6 171 233; /* #06abe9 */
-  --accent-orange-rgb: 232 157 23; /* #e89d17 */
+  --accent-orange-rgb: 255 122 26; /* #ff7a1a */
   --black-rgb: 21 19 17; /* #151311 */
   --white-rgb: 255 255 255; /* #ffffff */
   --background-rgb: 245 243 241; /* #f5f3f1 */
@@ -44,7 +44,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  background-color: var(--background);
+  background-color: var(--white);
   color: var(--text-primary);
 }
 
@@ -73,4 +73,50 @@ a {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Two overlaid range inputs acting as one min/max slider (PriceRangeSlider).
+   The tracks ignore the pointer so both thumbs stay grabbable. */
+.range-dual input[type="range"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  margin: 0;
+  background: none;
+  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.range-dual input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: var(--white);
+  border: 3px solid var(--black);
+  cursor: pointer;
+}
+.range-dual input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--white);
+  border: 3px solid var(--black);
+  cursor: pointer;
+}
+.range-dual input[type="range"]:focus-visible {
+  outline: none;
+}
+.range-dual input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgb(var(--primary-rgb));
+}
+
+/* Product shots on a white/light-grey backdrop, placed on a color block:
+   brightening first pushes the backdrop to pure white, which multiply then
+   makes disappear so the frames look cut out. */
+.photo-cutout {
+  mix-blend-mode: multiply;
+  filter: brightness(1.14) contrast(1.18);
 }

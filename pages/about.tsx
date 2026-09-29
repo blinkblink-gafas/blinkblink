@@ -16,7 +16,7 @@ const About: NextPage = () => {
       <Seo title={t.pages.about.title} description={t.pages.about.description} />
 
       <Section>
-        <h1 className="max-w-3xl text-[40px] font-bold leading-[48px] text-text-primary md:text-h1">
+        <h1 className="max-w-3xl text-[40px] font-black leading-[1.05] tracking-[-0.03em] text-text-primary md:text-[56px]">
           {t.about.heading}
         </h1>
         <p className="mt-6 max-w-2xl text-body text-text-secondary md:text-lg">{t.about.intro}</p>
@@ -26,11 +26,11 @@ const About: NextPage = () => {
             <li
               key={value.title}
               className={cn(
-                "rounded-2xl border-3 border-ink p-6 shadow-comic",
+                "rounded-2xl p-6",
                 valueCardColors[index % valueCardColors.length]
               )}
             >
-              <h2 className="text-h3 font-bold">{value.title}</h2>
+              <h2 className="text-xl font-black">{value.title}</h2>
               <p className="mt-2 text-body">{value.body}</p>
             </li>
           ))}

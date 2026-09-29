@@ -1,19 +1,27 @@
 /**
- * Maps a `Product.colors` name to a swatch hex for the color picker on the
- * product detail page. Extend this alongside any new color name used in
- * `lib/mockData.ts` — a name with no entry here falls back to a neutral gray
- * swatch rather than breaking the page.
+ * Maps a product's frame or lens color name (`Product.colors` /
+ * `Product.lensColors`) to a swatch hex for color pickers and filters. Extend
+ * this alongside any new color name used in `lib/mockData.ts` — a name with
+ * no entry here falls back to a neutral gray swatch rather than breaking the
+ * page.
  */
 const COLOR_SWATCHES: Record<string, string> = {
+  // Frame colors
   "Jet Black": "#151311",
   Tortoise: "#6b4a2b",
-  Amber: "#c8860a",
-  "Electric Blue": "#06abe9",
-  "Sunset Pink": "#f82b9a",
-  Rose: "#f2a6c4",
-  Clear: "#ffffff",
   Gold: "#c9a04a",
-  "Neon Yellow": "#f7e420",
+  Silver: "#b9bcc2",
+  Cream: "#efe3cf",
+  Clear: "#ffffff",
+  "Matte Green": "#3f5a47",
+  // Lens colors
+  Black: "#1f1f1f",
+  Brown: "#7a4a24",
+  Green: "#3c5e3a",
+  Purple: "#6b4d7a",
+  "Grey Gradient": "#5c5c5c",
+  "Brown Gradient": "#8a5a36",
+  "Mirror Red": "#e2452f",
 };
 
 const FALLBACK_SWATCH = "#a3a3a3";

@@ -40,20 +40,20 @@ const CartPage: NextPage = () => {
           />
         ) : (
           <>
-            <h1 className="text-h2 font-bold text-text-primary">{t.cart.heading}</h1>
+            <h1 className="text-[28px] font-black tracking-[-0.03em] text-text-primary sm:text-[36px]">{t.cart.heading}</h1>
             <p className="mt-1 text-body text-text-secondary">
               {formatCount(totalItems, t.cart.itemCountOne, t.cart.itemCount)}
             </p>
 
             <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
-              <ul className="divide-y divide-ink/10 rounded-2xl border-3 border-ink bg-white px-5">
+              <ul className="divide-y divide-ink/10 rounded-2xl bg-white ring-1 ring-ink/10 px-5">
                 {items.map((item) => (
                   <CartLineItem key={`${item.productId}-${item.color ?? ""}`} item={item} />
                 ))}
               </ul>
 
-              <aside className="h-fit rounded-2xl border-3 border-ink bg-white p-6 shadow-comic">
-                <div className="flex items-center justify-between text-h3">
+              <aside className="h-fit rounded-2xl bg-white ring-1 ring-ink/10 p-6">
+                <div className="flex items-center justify-between text-lg">
                   <span>{t.cart.subtotal}</span>
                   <span className="font-bold">{formatPrice(totalPrice)}</span>
                 </div>
@@ -63,7 +63,7 @@ const CartPage: NextPage = () => {
                 </Button>
                 <Link
                   href="/category/all"
-                  className="mt-4 block text-center text-small font-semibold text-secondary hover:underline hover:underline-offset-4"
+                  className="mt-4 block text-center text-small font-semibold text-text-primary hover:underline hover:underline-offset-4"
                 >
                   {t.cart.continueShopping}
                 </Link>

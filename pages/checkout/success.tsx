@@ -17,11 +17,11 @@ const OrderSuccessPage: NextPage = () => {
       <Seo title={t.pages.orderSuccess.title} noIndex />
 
       <Section>
-        <div className="mx-auto flex max-w-lg flex-col items-center rounded-2xl border-3 border-ink bg-white p-8 text-center shadow-comic-lg">
-          <span className="grid h-16 w-16 place-items-center rounded-full border-3 border-ink bg-primary">
+        <div className="mx-auto flex max-w-lg flex-col items-center rounded-2xl bg-white ring-1 ring-ink/10 p-8 text-center shadow-lg shadow-ink/5">
+          <span className="grid h-16 w-16 place-items-center rounded-full bg-primary">
             <PartyPopper size={30} aria-hidden="true" />
           </span>
-          <h1 className="mt-5 text-h2 font-bold">{t.orderSuccess.heading}</h1>
+          <h1 className="mt-5 text-[28px] font-black tracking-[-0.02em]">{t.orderSuccess.heading}</h1>
           <p className="mt-3 text-body text-text-secondary">
             {formatTranslation(t.orderSuccess.message, { orderId })}
           </p>

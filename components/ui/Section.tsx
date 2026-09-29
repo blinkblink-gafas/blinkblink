@@ -22,7 +22,7 @@ export default function Section({
 }: SectionProps) {
   return (
     <Tag
-      className={cn("w-full py-12 md:py-16 lg:py-24", className)}
+      className={cn("w-full py-10 md:py-14 lg:py-16", className)}
       {...rest}
     >
       {contained ? (

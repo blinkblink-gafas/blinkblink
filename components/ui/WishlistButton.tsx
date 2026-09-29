@@ -27,8 +27,8 @@ export default function WishlistButton({ productId, className, size = 16 }: Wish
       animate={{ scale: isWishlisted ? [1, 1.2, 0.96, 1] : 1 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "flex items-center justify-center rounded-full border-2 border-ink bg-white",
-        isWishlisted ? "text-secondary" : "text-ink",
+        "flex items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-ink/10",
+        isWishlisted ? "text-accent-pink" : "text-ink",
         className
       )}
     >

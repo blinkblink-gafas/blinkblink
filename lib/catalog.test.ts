@@ -16,14 +16,14 @@ describe("catalog", () => {
   });
 
   it("searches name, category, description and colors, case-insensitively, all terms required", () => {
-    expect(listProducts({ q: "AVIATOR" }).map((p) => p.slug)).toContain("eclipse-aviator");
-    expect(listProducts({ q: "sunset pink" }).every((p) => p.colors.includes("Sunset Pink"))).toBe(true);
-    expect(listProducts({ q: "aviator zzzz" })).toEqual([]);
+    expect(listProducts({ q: "WAYFARER" }).map((p) => p.slug)).toContain("weekend-wayfarer");
+    expect(listProducts({ q: "tortoise pop" }).map((p) => p.slug)).toEqual(["tortoise-pop"]);
+    expect(listProducts({ q: "wayfarer zzzz" })).toEqual([]);
     expect(listProducts({ q: "   " })).toHaveLength(mockProducts.length);
   });
 
   it("looks products up by slug", () => {
-    expect(getProduct("eclipse-aviator")?.id).toBe("p1");
+    expect(getProduct("classic-black")?.id).toBe("p1");
     expect(getProduct("missing")).toBeUndefined();
     expect(listProductSlugs()).toHaveLength(mockProducts.length);
   });

@@ -1,17 +1,23 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { ChevronLeft, Minus, Plus, ShoppingCart, Star } from "lucide-react";
+import { Minus, Plus, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import Seo from "@/components/layout/Seo";
+import BrighterSideBanner from "@/components/sections/BrighterSideBanner";
 import ProductGrid from "@/components/sections/ProductGrid";
+import ProductTabs from "@/components/sections/ProductTabs";
 import Badge from "@/components/ui/Badge";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import Button from "@/components/ui/Button";
+import Rating from "@/components/ui/Rating";
 import Section from "@/components/ui/Section";
 import WishlistButton from "@/components/ui/WishlistButton";
 import { getProduct, listProducts, listProductSlugs } from "@/lib/catalog";
 import { getColorSwatch } from "@/lib/colors";
-import { cn, formatPrice } from "@/lib/utils";
 import { formatTranslation, useTranslation } from "@/lib/i18n";
+import { storeConfig } from "@/lib/storeConfig";
+import { cn, discountPercent, formatPrice } from "@/lib/utils";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 import type { Product } from "@/types/product";
@@ -47,18 +53,18 @@ function productJsonLd(product: Product) {
 
 function ProductDetail({ product, related }: ProductPageProps) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const t = useTranslation();
 
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
-  const activeImage = useMemo(
-    () => product.images[activeImageIndex] ?? product.images[0],
-    [product, activeImageIndex]
-  );
+  const activeImage = product.images[activeImageIndex] ?? product.images[0];
+  const discount = discountPercent(product.price, product.mrp);
+  const shippingAmount = formatPrice(storeConfig.freeShippingThreshold);
 
-  const handleAddToCart = () => {
+  const addSelectionToCart = () => {
     dispatch(
       addToCart({
         productId: product.id,
@@ -71,6 +77,17 @@ function ProductDetail({ product, related }: ProductPageProps) {
     );
   };
 
+  const handleBuyNow = () => {
+    addSelectionToCart();
+    void router.push("/checkout");
+  };
+
+  const trustItems = [
+    { icon: Truck, text: t.productPage.trust.freeDelivery },
+    { icon: RotateCcw, text: t.productPage.trust.easyReturns },
+    { icon: ShieldCheck, text: t.productPage.trust.secureCheckout },
+  ];
+
   return (
     <>
       <Seo
@@ -81,92 +98,100 @@ function ProductDetail({ product, related }: ProductPageProps) {
         jsonLd={productJsonLd(product)}
       />
 
-      <Section>
-        <Link
-          href={`/category/${product.category}`}
-          className="mb-6 inline-flex items-center gap-1 text-small font-semibold text-text-secondary hover:text-secondary hover:underline hover:underline-offset-4"
-        >
-          <ChevronLeft size={16} />
-          {formatTranslation(t.productPage.breadcrumbBack, { category: t.categories[product.category] })}
-        </Link>
+      <Section className="pt-6 md:pt-8 lg:pt-8">
+        <Breadcrumbs
+          label={t.categoryPage.breadcrumb}
+          items={[
+            { label: t.common.home, href: "/" },
+            { label: t.categories[product.category], href: `/category/${product.category}` },
+            { label: product.name },
+          ]}
+        />
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
+        <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-[1.15fr_1fr] md:gap-12">
           {/* Gallery */}
           <div>
-            <div className="relative aspect-square w-full overflow-hidden rounded-2xl border-3 border-ink bg-surface">
-              {activeImage && (
-                <Image
-                  src={activeImage.url}
-                  alt={activeImage.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 768px) 45vw, 90vw"
-                  priority
-                />
+            <div className="flex flex-col-reverse gap-3 sm:flex-row">
+              {product.images.length > 1 && (
+                <div className="flex gap-3 sm:flex-col">
+                  {product.images.map((image, index) => (
+                    <button
+                      key={image.url}
+                      type="button"
+                      onClick={() => setActiveImageIndex(index)}
+                      aria-label={formatTranslation(t.productPage.showImage, { index: index + 1 })}
+                      aria-pressed={index === activeImageIndex}
+                      className={cn(
+                        "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-surface transition-shadow",
+                        index === activeImageIndex ? "ring-2 ring-ink" : "ring-1 ring-ink/10 hover:ring-ink/40"
+                      )}
+                    >
+                      <Image src={image.url} alt="" fill sizes="64px" className="object-cover" />
+                    </button>
+                  ))}
+                </div>
               )}
+
+              <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-surface">
+                {activeImage && (
+                  <Image
+                    src={activeImage.url}
+                    alt={activeImage.alt}
+                    fill
+                    priority
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                )}
+                {discount !== null && <Badge discountPercent={discount} className="absolute left-3 top-3 px-2.5 py-1.5 text-small" />}
+              </div>
             </div>
 
-            {product.images.length > 1 && (
-              <div className="mt-4 flex gap-3">
-                {product.images.map((image, index) => (
-                  <button
-                    key={image.url}
-                    type="button"
-                    onClick={() => setActiveImageIndex(index)}
-                    aria-label={image.alt}
-                    aria-pressed={index === activeImageIndex}
-                    className={cn(
-                      "relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2",
-                      index === activeImageIndex ? "border-secondary" : "border-ink/20"
-                    )}
-                  >
-                    <Image src={image.url} alt="" fill className="object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className="hidden md:block">
+              <ProductTabs product={product} />
+            </div>
           </div>
 
           {/* Details */}
           <div>
-            {product.badges && product.badges.length > 0 && (
-              <div className="mb-3 flex flex-wrap gap-2">
-                {product.badges.map((badge) => (
-                  <Badge key={badge} label={badge} />
-                ))}
-              </div>
-            )}
-
             <div className="flex items-start justify-between gap-4">
-              <h1 className="text-h2 font-bold text-text-primary">{product.name}</h1>
+              <h1 className="text-[28px] font-black leading-tight tracking-[-0.02em] text-text-primary sm:text-[34px]">
+                {product.name}
+              </h1>
               <WishlistButton productId={product.id} size={20} className="mt-1 h-11 w-11 shrink-0" />
             </div>
 
-            <div className="mt-2 flex items-center gap-1.5 text-body text-text-secondary">
-              <Star size={16} className="fill-primary text-ink" />
-              <span className="font-semibold text-text-primary">{product.rating.toFixed(1)}</span>
-              <span>({formatTranslation(t.productPage.reviewsLabel, { count: product.reviewCount })})</span>
-            </div>
+            <Rating
+              rating={product.rating}
+              reviewCount={product.reviewCount}
+              countLabel={formatTranslation(t.productPage.reviewsLabel, { count: product.reviewCount })}
+              className="mt-2"
+            />
 
-            <div className="mt-4 flex items-center gap-3">
-              <span className="text-h1 leading-none">{formatPrice(product.price, product.currency)}</span>
-              {product.mrp && product.mrp > product.price && (
-                <span className="text-h3 text-ink/40 line-through">
-                  {formatPrice(product.mrp, product.currency)}
-                </span>
+            <div className="mt-4 flex items-baseline gap-3">
+              <span className="text-[32px] font-black leading-none text-text-primary">{formatPrice(product.price, product.currency)}</span>
+              {discount !== null && product.mrp && (
+                <span className="text-lg text-text-secondary line-through">{formatPrice(product.mrp, product.currency)}</span>
               )}
             </div>
-
-            {product.description && (
-              <p className="mt-5 max-w-prose text-body text-text-secondary">{product.description}</p>
+            {discount !== null && product.mrp && (
+              <p className="mt-1 text-small font-semibold text-accent-pink">
+                {formatTranslation(t.productPage.youSave, {
+                  amount: formatPrice(product.mrp - product.price, product.currency),
+                  percent: discount,
+                })}
+              </p>
             )}
 
-            {/* Color picker */}
+            {product.description && <p className="mt-4 max-w-prose text-body text-text-secondary">{product.description}</p>}
+
+            {/* Frame color */}
             <div className="mt-6">
-              <p className="text-small font-semibold text-text-primary">
-                {formatTranslation(t.productPage.colorLabel, { color: selectedColor ?? "" })}
+              <p className="text-small font-bold text-text-primary">
+                {t.productPage.frameColor}
+                {selectedColor && <span className="font-normal text-text-secondary">: {selectedColor}</span>}
               </p>
-              <div className="mt-2 flex gap-2">
+              <div className="mt-2 flex gap-2.5">
                 {product.colors.map((color) => (
                   <button
                     key={color}
@@ -175,10 +200,8 @@ function ProductDetail({ product, related }: ProductPageProps) {
                     aria-label={color}
                     aria-pressed={selectedColor === color}
                     className={cn(
-                      "h-9 w-9 rounded-full border-2 transition-transform",
-                      selectedColor === color
-                        ? "border-ink ring-2 ring-secondary ring-offset-2"
-                        : "border-ink/30 hover:scale-105"
+                      "h-8 w-8 rounded-full ring-1 ring-ink/20 transition-transform",
+                      selectedColor === color ? "ring-2 ring-ink ring-offset-2" : "hover:scale-110"
                     )}
                     style={{ backgroundColor: getColorSwatch(color) }}
                   />
@@ -188,45 +211,59 @@ function ProductDetail({ product, related }: ProductPageProps) {
 
             {/* Quantity */}
             <div className="mt-6">
-              <p className="text-small font-semibold text-text-primary">{t.productPage.quantityLabel}</p>
-              <div className="mt-2 inline-flex items-center gap-4 rounded-pill border-3 border-ink px-4 py-2">
+              <p className="text-small font-bold text-text-primary">{t.productPage.quantityLabel}</p>
+              <div className="mt-2 inline-flex items-center gap-4 rounded-pill px-4 py-2 ring-1 ring-inset ring-ink/15">
                 <button
                   type="button"
                   aria-label={t.productPage.decreaseQuantity}
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="disabled:opacity-40"
                   disabled={quantity <= 1}
+                  className="disabled:opacity-30"
                 >
                   <Minus size={16} />
                 </button>
-                <span className="w-4 text-center font-semibold">{quantity}</span>
-                <button
-                  type="button"
-                  aria-label={t.productPage.increaseQuantity}
-                  onClick={() => setQuantity((q) => q + 1)}
-                >
+                <span className="w-5 text-center font-semibold" aria-live="polite">
+                  {quantity}
+                </span>
+                <button type="button" aria-label={t.productPage.increaseQuantity} onClick={() => setQuantity((q) => q + 1)}>
                   <Plus size={16} />
                 </button>
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleAddToCart}
-              disabled={!product.inStock}
-              className={cn(
-                "mt-8 inline-flex w-full items-center justify-center gap-2 rounded-pill border-3 border-ink bg-ink px-6 py-4 text-body font-semibold text-primary transition-all sm:w-auto",
-                "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-comic",
-                "active:translate-x-0 active:translate-y-0",
-                "disabled:opacity-50 disabled:pointer-events-none"
+            <div className="mt-6 flex flex-col gap-3">
+              <Button size="lg" onClick={addSelectionToCart} disabled={!product.inStock} className="w-full">
+                {product.inStock ? t.common.addToCart : t.common.outOfStock}
+              </Button>
+              {product.inStock && (
+                <Button size="lg" variant="secondary" onClick={handleBuyNow} className="w-full">
+                  {t.common.buyNow}
+                </Button>
               )}
-            >
-              <ShoppingCart size={18} />
-              {product.inStock ? t.common.addToCart : t.common.outOfStock}
-            </button>
+            </div>
+
+            <ul className="mt-6 flex flex-col gap-4">
+              {trustItems.map(({ icon: Icon, text }) => (
+                <li key={text.title} className="flex items-center gap-3">
+                  <Icon size={24} strokeWidth={1.75} aria-hidden="true" className="shrink-0 text-ink" />
+                  <div>
+                    <p className="text-small font-bold text-text-primary">{text.title}</p>
+                    <p className="text-xs text-text-secondary">
+                      {formatTranslation(text.subtitle, { amount: shippingAmount, days: storeConfig.returnDays })}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            <div className="md:hidden">
+              <ProductTabs product={product} />
+            </div>
           </div>
         </div>
       </Section>
+
+      <BrighterSideBanner />
 
       {related.length > 0 && (
         <ProductGrid
@@ -234,7 +271,6 @@ function ProductDetail({ product, related }: ProductPageProps) {
           heading={t.productPage.relatedHeading}
           viewAllHref={`/category/${product.category}`}
           viewAllLabel={t.common.viewAll}
-          className="bg-white"
         />
       )}
     </>

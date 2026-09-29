@@ -20,27 +20,23 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  // Primary: black bg, yellow text
-  primary: "bg-ink text-primary hover:bg-ink/90",
-  // Secondary: yellow bg, black text
-  secondary: "bg-primary text-ink hover:bg-primary/90",
+  // Primary: black bg, white text — Add to Cart, Shop Now
+  primary: "bg-ink text-white hover:bg-ink/85",
+  // Secondary: yellow bg, black text — Buy Now, Explore Collection
+  secondary: "bg-primary text-ink hover:brightness-95",
   // Accent: pink bg, white text
   accent: "bg-accent-pink text-white hover:bg-accent-pink/90",
-  // Ghost: white bg, black outline
-  ghost: "bg-white text-ink hover:bg-surface",
+  // Ghost: white bg, hairline outline
+  ghost: "bg-white text-ink ring-1 ring-inset ring-ink/15 hover:bg-surface",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
   sm: "text-small px-4 py-2 gap-1.5",
   md: "text-body px-6 py-3 gap-2",
-  lg: "text-h3 px-8 py-4 gap-2.5",
+  lg: "text-body px-8 py-4 gap-2.5",
 };
 
-/**
- * Bold, pill-shaped button used across the site. Every variant keeps the
- * thick ink border + hard "comic" shadow so buttons read as part of the
- * comic-book/streetwear system, not a generic rounded button.
- */
+/** Pill-shaped button used across the site. */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -56,10 +52,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const buttonClassName = cn(
-      "inline-flex items-center justify-center font-semibold rounded-pill border-3 border-ink shadow-comic-sm transition-all",
-      "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-comic",
-      "active:translate-x-0 active:translate-y-0 active:shadow-none",
-      "disabled:opacity-50 disabled:pointer-events-none",
+      "inline-flex items-center justify-center rounded-pill font-semibold transition-all",
+      "active:scale-[0.98]",
+      "disabled:pointer-events-none disabled:opacity-50",
       variantStyles[variant],
       sizeStyles[size],
       className

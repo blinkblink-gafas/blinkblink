@@ -7,6 +7,10 @@ export type ProductCategory =
   | "blue-light"
   | "accessories";
 
+export type FrameShape = "aviator" | "wayfarer" | "round" | "square" | "rectangle" | "cat-eye" | "sport";
+
+export type ProductGender = "men" | "women" | "unisex";
+
 export interface ProductImage {
   url: string;
   alt: string;
@@ -19,11 +23,16 @@ export interface Product {
   category: ProductCategory;
   price: number;
   mrp?: number; // present when the item is discounted; used for the strikethrough price
-  currency: string; // e.g. "USD", "INR"
+  currency: string; // ISO 4217, e.g. "EUR"
   rating: number; // 0–5
   reviewCount: number;
   images: ProductImage[];
-  colors: string[]; // hex values or color names for available frame colors
+  colors: string[]; // frame color names — each needs a swatch in lib/colors.ts
+  lensColors: string[]; // lens color names — each needs a swatch in lib/colors.ts
+  shape: FrameShape;
+  gender: ProductGender;
+  /** Short spec bullets for the product page's "Details" tab. */
+  features: string[];
   badges?: ProductBadgeLabel[];
   inStock: boolean;
   description?: string;

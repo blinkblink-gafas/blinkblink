@@ -1,63 +1,69 @@
-import Link from "next/link";
-import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
-import ProductGrid from "@/components/sections/ProductGrid";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import Seo from "@/components/layout/Seo";
+import ProductListing from "@/components/sections/ProductListing";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import EmptyState from "@/components/ui/EmptyState";
 import Section from "@/components/ui/Section";
-import { getProductsByCategory } from "@/lib/mockData";
-import { prettifyLabel } from "@/lib/utils";
+import { CATEGORY_SLUGS, listProducts } from "@/lib/catalog";
 import { formatTranslation, useTranslation } from "@/lib/i18n";
+import type { LocaleStrings } from "@/types/locales";
 import type { Product } from "@/types/product";
 
+type CategorySlug = keyof LocaleStrings["categories"];
+
 interface CategoryPageProps {
-  slug: string;
+  slug: CategorySlug;
   products: Product[];
 }
 
 const CategoryPage: NextPage<CategoryPageProps> = ({ slug, products }) => {
   const t = useTranslation();
-  const categoryLabel = slug === "all" ? "All Styles" : prettifyLabel(slug);
-  const values = { category: categoryLabel };
+  const categoryLabel = t.categories[slug];
 
   return (
     <>
-      <Head>
-        <title>{formatTranslation(t.pages.category.title, values)}</title>
-      </Head>
+      <Seo
+        title={formatTranslation(t.pages.category.title, { category: categoryLabel })}
+        description={t.categoryPage.subtitles[slug]}
+      />
 
-      <Section className="pb-0 pt-10 md:pt-12">
-        <h1 className="text-h2 font-bold text-text-primary">{categoryLabel}</h1>
-        {products.length > 0 && (
-          <p className="mt-2 text-body text-text-secondary">
-            {formatTranslation(t.categoryPage.resultsLabel, { count: products.length })}
-          </p>
-        )}
+      <Section className="pt-6 md:pt-8 lg:pt-8">
+        <Breadcrumbs
+          label={t.categoryPage.breadcrumb}
+          items={[{ label: t.common.home, href: "/" }, { label: categoryLabel }]}
+        />
+        <h1 className="mt-4 text-[32px] font-black tracking-[-0.03em] text-text-primary sm:text-[40px]">{categoryLabel}</h1>
+        <p className="mt-1 text-body text-text-secondary">{t.categoryPage.subtitles[slug]}</p>
+
+        <div className="mt-6">
+          {products.length > 0 ? (
+            <ProductListing products={products} />
+          ) : (
+            <EmptyState
+              heading={t.categoryPage.emptyHeading}
+              message={t.categoryPage.emptyMessage}
+              actionLabel={t.categoryPage.browseAll}
+              actionHref="/category/all"
+            />
+          )}
+        </div>
       </Section>
-
-      {products.length > 0 ? (
-        <ProductGrid products={products} />
-      ) : (
-        <Section>
-          <h2 className="text-h3 font-bold text-text-primary">{t.categoryPage.emptyHeading}</h2>
-          <p className="mt-2 max-w-md text-body text-text-secondary">{t.categoryPage.emptyMessage}</p>
-          <Link
-            href="/"
-            className="mt-6 inline-block text-small font-semibold text-secondary hover:underline hover:underline-offset-4"
-          >
-            {t.categoryPage.backToHome}
-          </Link>
-        </Section>
-      )}
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<CategoryPageProps> = async ({
-  params,
-}) => {
-  const slug = typeof params?.slug === "string" ? params.slug : "";
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: CATEGORY_SLUGS.map((slug) => ({ params: { slug } })),
+  // Unknown categories 404 instead of rendering an empty listing.
+  fallback: false,
+});
+
+export const getStaticProps: GetStaticProps<CategoryPageProps> = async ({ params }) => {
+  const slug = String(params?.slug) as CategorySlug;
 
   return {
-    props: { slug, products: getProductsByCategory(slug) },
+    props: { slug, products: listProducts({ category: slug }) },
+    revalidate: 60,
   };
 };
 

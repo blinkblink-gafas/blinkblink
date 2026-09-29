@@ -1,30 +1,34 @@
-import { motion } from "framer-motion";
-import { Heart, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
-import { formatPrice, cn } from "@/lib/utils";
+import { cn, discountPercent, formatPrice } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
+import Rating from "@/components/ui/Rating";
+import WishlistButton from "@/components/ui/WishlistButton";
 import { useTranslation } from "@/lib/i18n";
 
 export interface ProductCardProps {
   product: Product;
   className?: string;
+  /** Load the image eagerly — for cards visible on first paint. */
+  priority?: boolean;
 }
 
 /**
- * Product tile: image, badges, title, rating, price (+ strikethrough MRP
- * when discounted), and an Add to Cart button that dispatches into the cart
- * slice. The whole card links to its product detail page — the wishlist
- * toggle and Add to Cart button sit above that link (z-20) so they stay
- * independently clickable instead of triggering navigation.
+ * Product tile: photo, discount (or first) badge, wishlist toggle, name,
+ * price with strikethrough MRP, rating and Add to Cart. The whole card links
+ * to the product page; the wishlist and Add to Cart buttons sit above that
+ * link (z-20) so they stay independently clickable.
  */
-export default function ProductCard({ product, className }: ProductCardProps) {
+export default function ProductCard({ product, className, priority = false }: ProductCardProps) {
   const dispatch = useAppDispatch();
-  const primaryImage = product.images[0];
   const t = useTranslation();
+  const primaryImage = product.images[0];
+  const discount = discountPercent(product.price, product.mrp);
+  const firstBadge = product.badges?.find((badge) => badge !== "Sale");
 
   const handleAddToCart = () => {
     dispatch(
@@ -33,95 +37,65 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         name: product.name,
         price: product.price,
         image: primaryImage?.url ?? "",
+        color: product.colors[0],
         quantity: 1,
       })
     );
   };
 
   return (
-    <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl border-3 border-ink bg-white shadow-comic-sm",
+        "group relative flex flex-col rounded-2xl bg-white p-3 ring-1 ring-ink/10 transition-shadow hover:shadow-lg hover:shadow-ink/10",
         className
       )}
     >
-      <Link
-        href={`/product/${product.slug}`}
-        aria-label={product.name}
-        className="absolute inset-0 z-10"
-      />
+      <Link href={`/product/${product.slug}`} aria-label={product.name} className="absolute inset-0 z-10 rounded-2xl" />
 
-      {/* Image area */}
-      <div className="relative aspect-square w-full bg-surface">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-surface">
         {primaryImage ? (
           <Image
             src={primaryImage.url}
             alt={primaryImage.alt}
             fill
-            className="object-cover"
-            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+            priority={priority}
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-small text-ink/40">
-            {t.common.noImage}
-          </div>
+          <div className="flex h-full items-center justify-center text-small text-text-secondary">{t.common.noImage}</div>
         )}
 
-        {/* Badges */}
-        {product.badges && product.badges.length > 0 && (
-          <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-            {product.badges.map((badge) => (
-              <Badge key={badge} label={badge} />
-            ))}
-          </div>
-        )}
-
-        {/* Wishlist toggle */}
-        <button
-          type="button"
-          aria-label={t.common.addToWishlist}
-          className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full border-2 border-ink bg-white"
-        >
-          <Heart size={16} />
-        </button>
-      </div>
-
-      {/* Content */}
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="text-h3 line-clamp-1">{product.name}</h3>
-
-        <div className="flex items-center gap-1 text-small text-ink/70">
-          <Star size={14} className="fill-primary text-ink" />
-          <span>{product.rating.toFixed(1)}</span>
-          <span>({product.reviewCount})</span>
+        <div className="absolute left-2 top-2 flex gap-1">
+          {discount !== null ? <Badge discountPercent={discount} /> : firstBadge && <Badge label={firstBadge} />}
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-h3">{formatPrice(product.price, product.currency)}</span>
-          {product.mrp && product.mrp > product.price && (
-            <span className="text-small text-ink/40 line-through">
-              {formatPrice(product.mrp, product.currency)}
-            </span>
+        <WishlistButton productId={product.id} className="absolute right-2 top-2 z-20 h-8 w-8" />
+      </div>
+
+      <div className="flex flex-1 flex-col gap-1 px-1 pt-3">
+        <h3 className="line-clamp-1 text-body font-bold text-text-primary">{product.name}</h3>
+
+        <div className="flex items-baseline gap-2">
+          <span className={cn("text-body font-bold", discount !== null ? "text-accent-pink" : "text-text-primary")}>
+            {formatPrice(product.price, product.currency)}
+          </span>
+          {discount !== null && product.mrp && (
+            <span className="text-small text-text-secondary line-through">{formatPrice(product.mrp, product.currency)}</span>
           )}
         </div>
 
-        <button
-          type="button"
+        <Rating rating={product.rating} reviewCount={product.reviewCount} />
+
+        <Button
+          size="sm"
           onClick={handleAddToCart}
           disabled={!product.inStock}
-          className={cn(
-            "relative z-20 mt-2 inline-flex items-center justify-center gap-2 rounded-pill border-3 border-ink bg-ink px-4 py-2.5 text-body font-semibold text-primary transition-all",
-            "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-comic-sm",
-            "active:translate-x-0 active:translate-y-0",
-            "disabled:opacity-50 disabled:pointer-events-none"
-          )}
+          className="relative z-20 mt-2 w-full"
         >
-          <ShoppingCart size={16} />
           {product.inStock ? t.common.addToCart : t.common.outOfStock}
-        </button>
+        </Button>
       </div>
-    </motion.div>
+    </article>
   );
 }

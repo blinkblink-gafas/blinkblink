@@ -64,7 +64,7 @@ Goal: every page matches the Home, Category and Product reference designs.
 - [x] `lib/images.ts` for site photos, `lib/storeConfig.ts` for policies
 - [x] Merged to `main` (pull request #2)
 
-## Phase 4 — Editorial redesign and new collections 🚧 in progress
+## Phase 4 — Editorial redesign and new collections ✅ merged (photos still to replace)
 
 Goal: an editorial store look (layout inspired by premium fashion eyewear
 sites) in the unchanged blink blink colors, with the range reorganised into
@@ -91,7 +91,7 @@ Men, Women and Classic.
 - [x] Search also matches shape and lens color
 - [ ] Replace placeholder product photos with own photography (blocks
       launch)
-- [ ] Merge to `main`
+- [x] Merged to `main` (pull request #3)
 
 ## Backlog (not scheduled)
 

@@ -8,16 +8,14 @@ _Last updated: 19 Nov 2026_
 
 ## 1. Current status
 
-- **Phases 1–3 are complete and merged to `main`** (merge commit `4f7c851`,
-  pull request #2, 29 Sep 2026).
+- **Phases 1–4 are merged to `main`.** Phase 4 (editorial redesign and
+  Men / Women / Classic collections, plus the development guidelines) went
+  in with merge commit `abf58dd`, pull request #3, 19 Nov 2026.
 - The store is a **working front end on mock data**. Nothing is connected
   to a real backend, payment provider or email service.
-- Checks on `main`: typecheck clean, 32 unit tests passing, production
-  build passing (35 pages).
-- **In progress:** Phase 4 — editorial redesign and Men / Women / Classic
-  collections, branch `feat/phase4-editorial-redesign` (built on top of
-  `docs/guidelines`, which is not merged yet). Typecheck clean, 34 tests
-  passing, production build passing (62 pages).
+- Checks on `main`: typecheck clean, 34 unit tests passing, production
+  build passing (62 pages).
+- No feature branches are open; merged branches have been deleted.
 - **Blocking launch:** the product photos are third-party placeholders kept
   on this machine only (see section 2).
 
@@ -83,7 +81,8 @@ Anything here must be replaced or confirmed before launch.
 
 | Date | What | Branch / commit |
 |---|---|---|
-| 19 Nov 2026 | Phase 4: editorial redesign, Men / Women / Classic collections, 48-product placeholder catalog | `feat/phase4-editorial-redesign` |
+| 19 Nov 2026 | Phase 4 merged to `main` (includes the development guidelines) | PR #3 · `abf58dd` |
+| 19 Nov 2026 | Phase 4: editorial redesign, Men / Women / Classic collections, 48-product placeholder catalog | `feat/phase4-editorial-redesign` · `2b0fbd1` |
 | 3 Oct 2026 | Development guidelines | `docs/guidelines` · `257be3d` |
 | 29 Sep 2026 | Phase 3 redesign merged to `main` | PR #2 · `4f7c851` |
 | 29 Sep 2026 | Phase 3: redesign to the Home / Category / Product references, euro prices, new catalog fields, filter sidebar, pagination, banners, newsletter | `feat/phase3-redesign` · `d8ec743` |

@@ -152,9 +152,8 @@ downwards: pages → sections → ui → lib / store / types.
 - **Must not** show other brands' logos or names in photos or text.
 - Stock photos must be free for commercial use (currently Unsplash) and are
   placeholders until real photography exists.
-- **Must not commit or deploy third-party product photos.** The placeholder
-  product photos in `public/images/placeholder-products/` are local-only
-  and git-ignored; keep it that way until they are replaced.
+- **Only use photos blink blink owns or is licensed to use.** Product
+  photos are the brand's own, in `public/images/products/`.
 - Every meaningful image has `alt` text describing what it shows.
 
 ## 8. Git

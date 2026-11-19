@@ -130,7 +130,8 @@ Rules:
   not cover the frames.
 - No doodles or tilted sticker text (retired with the old look). The only
   decoration is the yellow sparkle in the marquee.
-- All current photos are placeholders — see `Memory.md`.
+- Product photos are the brand's own (`public/images/products/`); the
+  lifestyle photos are Unsplash placeholders — see `Memory.md`.
 
 ## 7. Icons
 

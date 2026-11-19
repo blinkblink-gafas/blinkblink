@@ -106,9 +106,8 @@ Today that means editing a few clearly named files (see `Architecture.md`).
 - A connected email service for the newsletter.
 - Legal and help pages (privacy, terms, cookies, FAQ, shipping, returns,
   size guide, contact).
-- Real product photography (the current product photos are local-only
-  placeholders that must not be published) and final brand assets (logo
-  file, exact colors).
+- Higher-resolution product photos, more angles per product, and final
+  brand assets (logo file, exact colors).
 - More languages and currencies.
 
 ## 6. Open decisions for the business

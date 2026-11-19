@@ -102,7 +102,7 @@ types/                 Shared TypeScript types (Product, CartItem, FilterState, 
 locales/en.json        Every user-facing string
 styles/globals.css     Tailwind layers, color variables, a few global classes
 public/images/         Your own photos go here
-  placeholder-products/  Local-only placeholder product photos (git-ignored)
+  products/              Product photos, <slug>-1.jpg
 docs/guidelines/       These documents
 ```
 

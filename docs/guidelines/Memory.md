@@ -16,8 +16,6 @@ _Last updated: 19 Nov 2026_
 - Checks on `main`: typecheck clean, 34 unit tests passing, production
   build passing (62 pages).
 - No feature branches are open; merged branches have been deleted.
-- **Blocking launch:** the product photos are third-party placeholders kept
-  on this machine only (see section 2).
 
 ## 2. What is a placeholder (not real yet)
 
@@ -26,7 +24,6 @@ Anything here must be replaced or confirmed before launch.
 | Item | Where | Note |
 |---|---|---|
 | Product catalog (48 products: names, prices, ratings, review counts, features) | `lib/mockData.ts` | Invented for the demo |
-| **Product photos** | `public/images/placeholder-products/` (paths in `lib/mockData.ts`) | **Third-party photos supplied by the owner from a scraped folder. Local-only: git-ignored, never committed, pushed or deployed. Must be replaced with own photography before any public launch.** `SOURCES.csv` in that folder records where each came from |
 | Lifestyle photos (hero, promo, editorial tile) | `lib/images.ts` | Free Unsplash stock |
 | Free delivery over €50, 30-day returns | `lib/storeConfig.ts` | Shown to customers; not confirmed by the business |
 | "Secure Checkout" trust line | product page | No payment exists yet |
@@ -46,9 +43,9 @@ Anything here must be replaced or confirmed before launch.
 | 2 | No end-to-end tests; flows are checked by hand in the browser | Regressions in flows are caught late | Open — backlog |
 | 3 | Unused entries left in `tailwind.config.ts` (old `h1`–`h3` type scale, `comic` shadows, `border-3` / `border-5`) | Harmless clutter; could tempt reuse of the retired look | Open — backlog |
 | 4 | Navbar cart / wishlist screen-reader labels say "1 items" | Minor wording for screen-reader users | Open — backlog |
-| 5 | A fresh clone has no product photos (the folder is git-ignored), so product tiles show empty | Only affects other machines and deployments | By design until real photos exist |
+| 5 | Product photos are small (400 × 200 px), so they look soft when enlarged on the product page | Less sharp on large screens | Open — replace with photos at least 1200px wide |
 | 6 | Footer and nav omit pages that don't exist yet (FAQ, shipping, legal, social links) | — | By design until the pages exist |
-| 7 | Each product has one photo and one frame color, so the product page gallery shows the photo plus a collection-color tile | Thinner gallery than a real store | Goes away with real photos |
+| 7 | Each product has one photo and one frame color, so the product page gallery shows the photo plus a collection-color tile | Thinner gallery than a real store | Open — add more angles per product |
 | 8 | Search only matches exact text in the name, collection, shape, description and colors; no typo tolerance or ranking | Basic search | Acceptable for mock data |
 
 ## 4. Things to know when working on this project
@@ -111,7 +108,8 @@ Anything here must be replaced or confirmed before launch.
 | 19 Nov 2026 | Editorial store layout (inspired by premium fashion eyewear sites) replaces the Phase 3 reference designs; brand colors unchanged | Owner's choice |
 | 19 Nov 2026 | Collections are Men, Women and Classic; Sunglasses, Eyeglasses and Sports removed; gender filter removed | Owner's choice; the collection already answers "who is it for" |
 | 19 Nov 2026 | Added Barlow Condensed as the display font (Poppins stays for body) | The editorial look depends on a tall, narrow headline face |
-| 19 Nov 2026 | Owner-supplied third-party product photos used as local-only placeholders: git-ignored, products renamed with blink blink names | Lets the owner see the look now without publishing or committing another brand's photos |
+| 19 Nov 2026 | Product photos committed to `public/images/products/` and deployed with the site | Owner confirmed the photos are blink blink's own |
+| 19 Nov 2026 | Owner-supplied product photos first kept local-only (git-ignored) | Kept out of the repo until ownership was confirmed |
 | 19 Nov 2026 | Filters open in a slide-in "Filter and sort" panel on every screen size | Matches the editorial layout; frees the full width for a 4-column grid |
 | 3 Oct 2026 | Guidelines live in `docs/guidelines/` (PRD, Architecture, Rule, design, Task, Memory) | Keep development from drifting |
 | 29 Sep 2026 | Follow the owner's Home / Category / Product reference designs; drop the "Playful sticker" direction explored earlier | Owner's choice |

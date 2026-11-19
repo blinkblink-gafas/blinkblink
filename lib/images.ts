@@ -8,7 +8,7 @@
  *
  * Lifestyle photos are free Unsplash placeholders (unsplash.com/license —
  * free for commercial use, no attribution required). Collection tiles reuse
- * local-only placeholder product photos (see `lib/mockData.ts`).
+ * product photos from `public/images/products/`.
  */
 
 export interface SiteImage {
@@ -40,15 +40,15 @@ export const siteImages = {
   /** Collection tiles — product shots on a white background, shown on a color block. */
   categories: {
     men: {
-      url: "/images/placeholder-products/captain.jpg",
+      url: "/images/products/captain-1.jpg",
       alt: "Black double-bridge aviator sunglasses",
     },
     women: {
-      url: "/images/placeholder-products/kitty.jpg",
+      url: "/images/products/kitty-1.jpg",
       alt: "Tortoiseshell cat-eye sunglasses",
     },
     classic: {
-      url: "/images/placeholder-products/havana.jpg",
+      url: "/images/products/havana-1.jpg",
       alt: "Tortoiseshell round sunglasses",
     },
   },

@@ -74,8 +74,7 @@ Men, Women and Classic.
 - [x] Collections: Sunglasses / Eyeglasses / Sports replaced by Men, Women,
       Classic (types, catalog, routes, nav, footer, tiles); gender filter
       removed (the collection does that job)
-- [x] Catalog: 48 placeholder products with new shapes (oval, geometric);
-      photos local-only and git-ignored
+- [x] Catalog: 48 products with new shapes (oval, geometric)
 - [x] Look: condensed display font (Barlow Condensed), light-gray page with
       white tiles, square corners, uppercase buttons and labels; unused
       comic shadows, thick borders and old type scale removed
@@ -89,8 +88,8 @@ Men, Women and Classic.
       like" carousel
 - [x] Product card: quick-add bag icon, 40px icon tap targets
 - [x] Search also matches shape and lens color
-- [ ] Replace placeholder product photos with own photography (blocks
-      launch)
+- [x] Product photos: blink blink's own photos committed to
+      `public/images/products/`
 - [x] Merged to `main` (pull request #3)
 
 ## Backlog (not scheduled)

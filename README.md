@@ -22,10 +22,6 @@ yarn dev
 
 Then open http://localhost:3000.
 
-> **Product photos are local-only.** The placeholder product photos live in
-> `public/images/placeholder-products/`, which is git-ignored, so a fresh
-> clone shows empty product tiles until you add photos — see "Images" below.
-
 ```bash
 yarn test       # unit tests (Vitest)
 yarn typecheck  # tsc --noEmit
@@ -106,7 +102,7 @@ lib/                   catalog.ts (server data access), mockData.ts,
                        filters.ts + useUrlFilters.ts, checkout.ts,
                        colors.ts, i18n.ts, utils.ts
 public/images/         Your own photos go here (see Images below);
-                       placeholder-products/ is local-only and git-ignored
+                       products/ holds the product photos
 ```
 
 ## Data
@@ -124,17 +120,17 @@ public/images/         Your own photos go here (see Images below);
   (`?shape=round&color=Gold&lens=Green&price=30-45&stock=1&sort=price-asc&page=2`),
   so filtered views are shareable. See `lib/filters.ts`.
 
-## Images — replacing the placeholders
+## Images
 
-**Every photo is a placeholder.** They live in exactly two places:
+Photos are set in exactly two places:
 
 | What | Where | Current source |
 |---|---|---|
-| Product photos (48 products) | each product's `images` in `lib/mockData.ts` | Local-only files in `public/images/placeholder-products/` — **git-ignored, never committed or deployed, must be replaced before launch** |
-| Hero, promo banner, editorial tile | `siteImages` in `lib/images.ts` | Free Unsplash photos ([license](https://unsplash.com/license)) |
-| Men / Women / Classic tiles | `siteImages.categories` in `lib/images.ts` | Reuse placeholder product photos |
+| Product photos (48 products) | each product's `images` in `lib/mockData.ts` | blink blink's own photos in `public/images/products/` |
+| Hero, promo banner, editorial tile | `siteImages` in `lib/images.ts` | Free Unsplash placeholders ([license](https://unsplash.com/license)) |
+| Men / Women / Classic tiles | `siteImages.categories` in `lib/images.ts` | Reuse product photos |
 
-To use your own product photo:
+To add or change a product photo:
 
 1. Put the file in `public/images/products/`, named after the product slug,
    e.g. `public/images/products/midnight-1.jpg`. Square or 2:1, at least
@@ -150,9 +146,7 @@ For other photos, put the file in `public/images/` and change the `url` in
 changes. Photos placed on color blocks (collection tiles, the product
 page's second gallery tile) need a plain white background, since
 `photo-cutout` removes it. Once no `unsplash(...)` URLs remain, you can drop
-the `images.unsplash.com` entry from `next.config.js`, and once every
-product uses its own photos you can delete
-`public/images/placeholder-products/` and its `.gitignore` line.
+the `images.unsplash.com` entry from `next.config.js`.
 
 ## Store settings
 

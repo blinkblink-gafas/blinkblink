@@ -1,9 +1,13 @@
 # blink blink — storefront
 
-Next.js storefront for blink blink eyewear. Live so far: a homepage (hero,
-category cards, promo banner, best sellers, newsletter signup), category
-listings with shape tabs, a filter sidebar (price slider, frame/lens color,
-shape, gender, stock) and pagination, product pages, search, a slide-in cart
+Next.js storefront for blink blink eyewear, styled as a clean editorial
+store (condensed uppercase headlines, white product tiles on a light-gray
+page, square buttons) in the blink blink colors. Live so far: a homepage
+(full-width photo hero, scrolling selling-points strip, best-sellers and
+new-in carousels, Men / Women / Classic collection tiles, promo banner,
+newsletter signup), collection listings with shape tabs, a "Filter and sort"
+panel (sort, price slider, frame/lens color, shape, stock) and pagination,
+product pages, search, a slide-in cart
 drawer plus `/cart`, a demo checkout (no payment taken), a wishlist, and
 About/Account/404 pages. Prices are in euro. Cart and wishlist are saved in
 `localStorage`. No real backend yet: the catalog is `lib/mockData.ts`,
@@ -17,6 +21,10 @@ yarn dev
 ```
 
 Then open http://localhost:3000.
+
+> **Product photos are local-only.** The placeholder product photos live in
+> `public/images/placeholder-products/`, which is git-ignored, so a fresh
+> clone shows empty product tiles until you add photos — see "Images" below.
 
 ```bash
 yarn test       # unit tests (Vitest)
@@ -55,13 +63,16 @@ component code needs to change.
 | `surface` / `background` | `--background-rgb` | `#F5F3F1` | light gray background |
 | `white` | `--white-rgb` | `#FFFFFF` | white |
 
-The Poppins font (400/600/700/900 — headlines use `font-black`) is loaded in
-`pages/_app.tsx`.
+Two fonts are loaded in `pages/_app.tsx`: **Poppins** (400/600/700/900)
+for body text, labels and buttons, and **Barlow Condensed** (600/700/800,
+plus italic) for headlines, product names and prices (`font-display`).
 
-**Look and feel:** black navbar and footer, white page, bold yellow / pink /
-blue / orange color blocks for heroes and banners, white product cards with a
-hairline ring (`ring-1 ring-ink/10`), and pill buttons (`Button`: black
-primary, yellow secondary).
+**Look and feel:** yellow announcement bar, light header with the collection
+links on their own row, light warm-gray page (`bg-surface`) with white
+product tiles, square corners, uppercase buttons and labels, full-width
+photo hero, color blocks (yellow / pink / blue / orange) for collection tiles
+and banners, black footer. Headlines are condensed uppercase with one accent
+word in pink italics ("OUR *BEST-SELLERS*").
 
 **Cut-out product photos:** add the `photo-cutout` class (in
 `styles/globals.css`) to a photo with a white or light-gray background that
@@ -77,13 +88,14 @@ pages/                index, about, account (placeholder), cart, wishlist,
                        success), api/ (products, products/[slug], categories)
 components/layout/     Navbar (search, wishlist, cart), Footer, CartDrawer,
                        Seo (meta/OG/JSON-LD), Layout (wraps every page)
-components/sections/   Hero, ShopByCategory, PromoBanner, ProductGrid,
-                       NewsletterSignup, ProductListing (+ FilterSidebar),
-                       ProductTabs, BrighterSideBanner
+components/sections/   Hero, Marquee, ProductCarousel, ShopByCategory,
+                       PromoBanner, NewsletterSignup, ProductGrid,
+                       ProductListing (+ FilterSidebar), ProductAccordion
 components/ui/         Button, Badge, Rating, Section, SectionHeading,
                        BrandLogo, Breadcrumbs, Pagination, PriceRangeSlider,
-                       ProductCard, CategoryCard, WishlistButton,
-                       CartLineItem, FreeShippingProgress, EmptyState
+                       ProductCard, CategoryCard, EditorialTile,
+                       WishlistButton, CartLineItem, FreeShippingProgress,
+                       EmptyState
 store/                 Redux store, apiSlice + productsApi (RTK Query),
                        cartSlice, wishlistSlice, persistence (localStorage)
 types/                 Product, CartItem, FilterState, LocaleStrings, etc.
@@ -93,7 +105,8 @@ lib/                   catalog.ts (server data access), mockData.ts,
                        images.ts (site photos), storeConfig.ts,
                        filters.ts + useUrlFilters.ts, checkout.ts,
                        colors.ts, i18n.ts, utils.ts
-public/images/         Your own photos go here (see Images below)
+public/images/         Your own photos go here (see Images below);
+                       placeholder-products/ is local-only and git-ignored
 ```
 
 ## Data
@@ -108,36 +121,43 @@ public/images/         Your own photos go here (see Images below)
   **`/api/categories`** serve the same data to the client through
   `store/api/productsApi.ts` (used by search and the wishlist).
 - **Filters live in the URL**
-  (`?shape=round&color=Gold&lens=Green&gender=women&price=30-45&stock=1&sort=price-asc&page=2`),
+  (`?shape=round&color=Gold&lens=Green&price=30-45&stock=1&sort=price-asc&page=2`),
   so filtered views are shareable. See `lib/filters.ts`.
 
 ## Images — replacing the placeholders
 
-All photos are currently free placeholders from Unsplash
-([license](https://unsplash.com/license): free for commercial use, no
-attribution required). They live in exactly two places:
+**Every photo is a placeholder.** They live in exactly two places:
 
-| What | Where |
-|---|---|
-| Product photos | each product's `images` in `lib/mockData.ts` |
-| Hero, promo banner, newsletter, "Brighter Side" banner, category cards | `siteImages` in `lib/images.ts` |
+| What | Where | Current source |
+|---|---|---|
+| Product photos (48 products) | each product's `images` in `lib/mockData.ts` | Local-only files in `public/images/placeholder-products/` — **git-ignored, never committed or deployed, must be replaced before launch** |
+| Hero, promo banner, editorial tile | `siteImages` in `lib/images.ts` | Free Unsplash photos ([license](https://unsplash.com/license)) |
+| Men / Women / Classic tiles | `siteImages.categories` in `lib/images.ts` | Reuse placeholder product photos |
 
-To use your own photo:
+To use your own product photo:
 
-1. Put the file in `public/images/` (e.g. `public/images/hero.jpg`, or
-   `public/images/products/classic-black-1.jpg`).
-2. Replace the matching `url` with its path — `url: "/images/hero.jpg"` —
-   and update the `alt` text to describe the photo.
+1. Put the file in `public/images/products/`, named after the product slug,
+   e.g. `public/images/products/midnight-1.jpg`. Square or 2:1, at least
+   1200px wide, frame centered on a **pure white** background, front view
+   first.
+2. In `lib/mockData.ts`, replace that product's `images` entry:
+   `images: [{ url: "/images/products/midnight-1.jpg", alt: "…" }, …]`.
+   The first image shows on cards; extra images appear in the product
+   page gallery.
 
-That's it; no component code changes. Photos placed on color blocks (hero,
-category cards, banners) look best on a plain white background, since
+For other photos, put the file in `public/images/` and change the `url` in
+`lib/images.ts` (e.g. `url: "/images/hero.jpg"`). No component code
+changes. Photos placed on color blocks (collection tiles, the product
+page's second gallery tile) need a plain white background, since
 `photo-cutout` removes it. Once no `unsplash(...)` URLs remain, you can drop
-the `images.unsplash.com` entry from `next.config.js`.
+the `images.unsplash.com` entry from `next.config.js`, and once every
+product uses its own photos you can delete
+`public/images/placeholder-products/` and its `.gitignore` line.
 
 ## Store settings
 
 `lib/storeConfig.ts` holds the currency, free-delivery threshold (€50),
-return window (30 days) and products per page (9). The delivery and returns
+return window (30 days) and products per page (12). The delivery and returns
 figures are **placeholders** shown to customers on the homepage, product
 page and cart — confirm them before launch.
 
@@ -161,27 +181,31 @@ page and cart — confirm them before launch.
 
 - **Button** — `variant`: `primary` (black/white) · `secondary`
   (yellow/black) · `accent` (pink/white) · `ghost` (white, hairline ring).
-  Pill-shaped.
+  Square corners, uppercase label.
 - **Badge** — `label`: `New` · `Bestseller` · `Sale` · `Limited`, each with
   its own token color, or `discountPercent` for a pink "-20%" chip.
 - **Section** — consistent max-width (`max-w-section`, 1280px), responsive
   padding, and vertical rhythm wrapper for every section. To override its
   default `py-*`, pass side-specific classes (`pt-*`/`pb-*`) — a plain
   `py-0` can lose to `py-12` depending on CSS order.
-- **ProductCard** — typed to `Product`: photo, discount (or first) badge,
-  wishlist toggle (`WishlistButton`), name, price (pink when discounted) +
-  strikethrough MRP, rating, and an "Add to Cart" button wired to
-  `cartSlice`. The whole card links to
-  `/product/[slug]`; the wishlist and Add to Cart buttons sit above that
-  link so they stay independently clickable.
-- **ProductGrid** (`components/sections/`) — takes a `Product[]` and an
-  optional heading/"View All" link, and renders a responsive `ProductCard`
-  grid. Used by the homepage, category, search, wishlist and
-  related-products sections.
+- **ProductCard** — typed to `Product`: white tile with the photo, one
+  status badge, wishlist heart and quick-add bag icon, color dot, then
+  condensed uppercase name + color on the left and price (pink when
+  discounted, MRP struck through above) on the right. The whole card links
+  to `/product/[slug]`; the two icon buttons sit above that link so they
+  stay independently clickable.
+- **ProductCarousel** (`components/sections/`) — a heading plus a sideways
+  row of `ProductCard`s with back / forward arrows. Used for the homepage
+  best-sellers and new-in rows and "You may also like".
+- **ProductGrid** (`components/sections/`) — a plain responsive
+  `ProductCard` grid with an optional heading (used by the wishlist).
 - **ProductListing** (`components/sections/`) — give it a `Product[]` and
-  it renders shape tabs, sort, the `FilterSidebar` (a slide-in panel on
-  mobile), the grid and `Pagination`, all synced to the URL. Used by the
+  it renders underlined shape tabs, a result count, the "Filter and sort"
+  slide-in panel (sort + `FilterSidebar`), a 4-column grid with an optional
+  `EditorialTile`, and `Pagination`, all synced to the URL. Used by the
   category and search pages.
+- **SectionHeading** — condensed uppercase title; pass `{ lead, accent }`
+  to set the accent words in pink italics.
 - **EmptyState** — heading, message and optional call-to-action button,
   shared by every "nothing here" view.
 - **CartLineItem** — one cart row with quantity stepper and remove; used by

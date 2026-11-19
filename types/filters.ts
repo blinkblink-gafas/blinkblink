@@ -1,4 +1,4 @@
-import type { FrameShape, ProductGender } from "@/types/product";
+import type { FrameShape } from "@/types/product";
 
 export interface PriceRange {
   min: number;
@@ -11,7 +11,6 @@ export interface FilterState {
   shapes: FrameShape[];
   frameColors: string[];
   lensColors: string[];
-  genders: ProductGender[];
   /** Inclusive price bounds; null means "any price". */
   priceRange: PriceRange | null;
   inStockOnly: boolean;

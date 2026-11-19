@@ -1,15 +1,9 @@
 export type ProductBadgeLabel = "New" | "Bestseller" | "Sale" | "Limited";
 
-export type ProductCategory =
-  | "sunglasses"
-  | "eyeglasses"
-  | "sports"
-  | "blue-light"
-  | "accessories";
+/** The store's collections. Each has a listing page at `/category/<slug>`. */
+export type ProductCategory = "men" | "women" | "classic";
 
-export type FrameShape = "aviator" | "wayfarer" | "round" | "square" | "rectangle" | "cat-eye" | "sport";
-
-export type ProductGender = "men" | "women" | "unisex";
+export type FrameShape = "square" | "rectangle" | "round" | "oval" | "cat-eye" | "aviator" | "geometric";
 
 export interface ProductImage {
   url: string;
@@ -30,7 +24,6 @@ export interface Product {
   colors: string[]; // frame color names — each needs a swatch in lib/colors.ts
   lensColors: string[]; // lens color names — each needs a swatch in lib/colors.ts
   shape: FrameShape;
-  gender: ProductGender;
   /** Short spec bullets for the product page's "Details" tab. */
   features: string[];
   badges?: ProductBadgeLabel[];

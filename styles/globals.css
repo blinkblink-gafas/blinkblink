@@ -44,7 +44,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  background-color: var(--white);
+  /* Warm light-gray page; product cards and panels sit on it in white. */
+  background-color: var(--background);
   color: var(--text-primary);
 }
 
@@ -57,10 +58,9 @@ a {
   text-decoration: none;
 }
 
-/* Visible keyboard focus state — kept bold/on-brand instead of the
-   default thin browser outline. */
+/* Visible keyboard focus state. */
 :focus-visible {
-  outline: 3px solid var(--color-ink);
+  outline: 2px solid var(--color-ink);
   outline-offset: 2px;
 }
 

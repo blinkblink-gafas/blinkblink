@@ -35,3 +35,6 @@ pnpm-debug.log*
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Local-only placeholder product photos (third-party images; never commit or deploy)
+public/images/placeholder-products/

@@ -6,6 +6,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import Section from "@/components/ui/Section";
 import { CATEGORY_SLUGS, listProducts } from "@/lib/catalog";
 import { formatTranslation, useTranslation } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 import type { LocaleStrings } from "@/types/locales";
 import type { Product } from "@/types/product";
 
@@ -15,6 +16,14 @@ interface CategoryPageProps {
   slug: CategorySlug;
   products: Product[];
 }
+
+/** Each collection's banner color — matches its homepage tile. */
+const bannerClasses: Record<CategorySlug, string> = {
+  all: "bg-ink text-white",
+  men: "bg-accent-blue text-white",
+  women: "bg-accent-pink text-white",
+  classic: "bg-primary text-ink",
+};
 
 const CategoryPage: NextPage<CategoryPageProps> = ({ slug, products }) => {
   const t = useTranslation();
@@ -27,17 +36,22 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ slug, products }) => {
         description={t.categoryPage.subtitles[slug]}
       />
 
-      <Section className="pt-6 md:pt-8 lg:pt-8">
+      <header className={cn("w-full", bannerClasses[slug])}>
+        <div className="mx-auto flex min-h-[180px] max-w-section flex-col justify-end px-4 pb-6 pt-10 md:min-h-[240px] md:px-8 md:pb-8 lg:px-12">
+          <h1 className="font-display text-[64px] font-extrabold uppercase leading-[0.85] sm:text-[88px] lg:text-[112px]">{categoryLabel}</h1>
+          <p className="mt-2 text-small font-semibold sm:text-body">{t.categoryPage.subtitles[slug]}</p>
+        </div>
+      </header>
+
+      <Section className="pt-4 md:pt-5 lg:pt-5">
         <Breadcrumbs
           label={t.categoryPage.breadcrumb}
           items={[{ label: t.common.home, href: "/" }, { label: categoryLabel }]}
         />
-        <h1 className="mt-4 text-[32px] font-black tracking-[-0.03em] text-text-primary sm:text-[40px]">{categoryLabel}</h1>
-        <p className="mt-1 text-body text-text-secondary">{t.categoryPage.subtitles[slug]}</p>
 
-        <div className="mt-6">
+        <div className="mt-4">
           {products.length > 0 ? (
-            <ProductListing products={products} />
+            <ProductListing products={products} showEditorialTile />
           ) : (
             <EmptyState
               heading={t.categoryPage.emptyHeading}

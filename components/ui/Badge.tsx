@@ -25,7 +25,7 @@ export default function Badge({ label, discountPercent, className, ...rest }: Ba
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md px-2 py-1 text-xs font-bold leading-none",
+        "inline-flex items-center px-2 py-1 text-[10px] font-semibold uppercase leading-none tracking-[0.06em]",
         isDiscount ? "bg-accent-pink text-white" : badgeStyles[label],
         className
       )}

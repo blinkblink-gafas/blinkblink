@@ -10,5 +10,5 @@ export const storeConfig = {
   /** Days a customer has to return an order. */
   returnDays: 30,
   /** Products shown per page on category listings. */
-  productsPerPage: 9,
+  productsPerPage: 12,
 } as const;

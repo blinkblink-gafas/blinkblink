@@ -7,13 +7,7 @@ import type { Product, ProductCategory } from "@/types/product";
  * real backend only touches this file.
  */
 
-export const PRODUCT_CATEGORIES: ProductCategory[] = [
-  "sunglasses",
-  "eyeglasses",
-  "sports",
-  "blue-light",
-  "accessories",
-];
+export const PRODUCT_CATEGORIES: ProductCategory[] = ["men", "women", "classic"];
 
 /** Category slugs that have a listing page: every real category plus "all". */
 export const CATEGORY_SLUGS: string[] = ["all", ...PRODUCT_CATEGORIES];
@@ -38,7 +32,7 @@ export function listProducts({ category, q }: ProductQuery = {}): Product[] {
   if (query) {
     const terms = query.split(/\s+/);
     products = products.filter((product) => {
-      const haystack = [product.name, product.category, product.description ?? "", ...product.colors]
+      const haystack = [product.name, product.category, product.shape, product.description ?? "", ...product.colors, ...product.lensColors]
         .join(" ")
         .toLowerCase();
       return terms.every((term) => haystack.includes(term));
@@ -60,4 +54,11 @@ export function getFeaturedProducts(limit = 4): Product[] {
   const featured = mockProducts.filter((product) => product.badges?.includes("Bestseller"));
   const rest = mockProducts.filter((product) => !featured.includes(product));
   return [...featured, ...rest].slice(0, limit);
+}
+
+/** "New"-badged products first, then the rest of the catalog from newest-added (end of the list). */
+export function getNewProducts(limit = 4): Product[] {
+  const fresh = mockProducts.filter((product) => product.badges?.includes("New"));
+  const rest = [...mockProducts].reverse().filter((product) => !fresh.includes(product));
+  return [...fresh, ...rest].slice(0, limit);
 }

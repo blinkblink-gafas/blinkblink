@@ -6,8 +6,9 @@
  * To use your own image: put the file in `public/images/` and replace the
  * `url` with its path, e.g. `url: "/images/hero.jpg"`. Nothing else changes.
  *
- * The current URLs are free Unsplash placeholders (unsplash.com/license —
- * free for commercial use, no attribution required).
+ * Lifestyle photos are free Unsplash placeholders (unsplash.com/license —
+ * free for commercial use, no attribution required). Collection tiles reuse
+ * local-only placeholder product photos (see `lib/mockData.ts`).
  */
 
 export interface SiteImage {
@@ -21,34 +22,34 @@ export function unsplash(photoId: string, width = 1200): string {
 }
 
 export const siteImages = {
+  /** Full-width homepage hero — a person wearing sunglasses, subject on the right. */
   hero: {
-    url: unsplash("1584036553516-bf83210aa16c", 1400),
-    alt: "Black browline sunglasses with gradient lenses",
+    url: unsplash("1564086334005-5c65e4f9f242", 2000),
+    alt: "Woman in black cat-eye sunglasses among palm leaves",
   },
+  /** "Wear your personality" banner. */
   promo: {
-    url: unsplash("1778844699006-cded6a38d898", 1200),
-    alt: "Man wearing white sport sunglasses with orange mirrored lenses",
+    url: unsplash("1619785690726-89c6b3bd3849", 1400),
+    alt: "Woman in a purple coat adjusting slim black sunglasses",
   },
-  newsletter: {
-    url: unsplash("1653038282189-803202722a05", 800),
-    alt: "Dark green square sunglasses",
+  /** Editorial tile inside the category grid. */
+  editorial: {
+    url: unsplash("1778844699006-cded6a38d898", 1000),
+    alt: "Man wearing white sunglasses with orange mirrored lenses",
   },
-  brighterSide: {
-    url: unsplash("1631161475251-9c1b87c34c1a", 1000),
-    alt: "Black sunglasses with brown gradient lenses",
-  },
+  /** Collection tiles — product shots on a white background, shown on a color block. */
   categories: {
-    sunglasses: {
-      url: unsplash("1631161475251-9c1b87c34c1a", 800),
-      alt: "Black sunglasses with brown gradient lenses",
+    men: {
+      url: "/images/placeholder-products/captain.jpg",
+      alt: "Black double-bridge aviator sunglasses",
     },
-    eyeglasses: {
-      url: unsplash("1646084081219-1090f72a531c", 800),
-      alt: "Thin black and gold round eyeglasses",
+    women: {
+      url: "/images/placeholder-products/kitty.jpg",
+      alt: "Tortoiseshell cat-eye sunglasses",
     },
-    sports: {
-      url: unsplash("1708799366365-a24608103bed", 800),
-      alt: "Black wraparound sports sunglasses",
+    classic: {
+      url: "/images/placeholder-products/havana.jpg",
+      alt: "Tortoiseshell round sunglasses",
     },
   },
 } satisfies Record<string, SiteImage | Record<string, SiteImage>>;

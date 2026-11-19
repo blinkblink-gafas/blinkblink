@@ -7,9 +7,9 @@ import type { LocaleStrings } from "@/types/locales";
 type FooterLinkKey = keyof LocaleStrings["footer"]["links"];
 
 const shopLinks: Array<{ key: keyof LocaleStrings["categories"]; href: string }> = [
-  { key: "sunglasses", href: "/category/sunglasses" },
-  { key: "eyeglasses", href: "/category/eyeglasses" },
-  { key: "sports", href: "/category/sports" },
+  { key: "men", href: "/category/men" },
+  { key: "women", href: "/category/women" },
+  { key: "classic", href: "/category/classic" },
   { key: "all", href: "/category/all" },
 ];
 
@@ -73,7 +73,7 @@ export default function Footer() {
 function FooterColumn({ heading, children }: { heading: string; children: ReactNode }) {
   return (
     <nav aria-label={heading}>
-      <h2 className="text-small font-bold text-primary">{heading}</h2>
+      <h2 className="text-xs font-semibold uppercase tracking-[0.08em] text-primary">{heading}</h2>
       <ul className="mt-4 flex flex-col gap-2.5">{children}</ul>
     </nav>
   );

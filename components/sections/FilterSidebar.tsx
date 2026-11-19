@@ -1,7 +1,7 @@
 import { Check } from "lucide-react";
 import type { ReactNode } from "react";
 import PriceRangeSlider from "@/components/ui/PriceRangeSlider";
-import { DEFAULT_FILTERS, FRAME_SHAPES, GENDERS, countActiveFilters } from "@/lib/filters";
+import { DEFAULT_FILTERS, FRAME_SHAPES, countActiveFilters } from "@/lib/filters";
 import { getColorSwatch } from "@/lib/colors";
 import { useTranslation } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,7 @@ function toggle<T>(list: T[], value: T): T[] {
 }
 
 /**
- * Price, frame color, lens color, frame shape, gender and availability
+ * Price, frame color, lens color, frame shape and availability
  * filters. Options come from the products being listed, so a filter never
  * offers a value that would return nothing on its own.
  */
@@ -38,8 +38,8 @@ export default function FilterSidebar({ filters, options, onChange }: FilterSide
 
   return (
     <div className="flex flex-col divide-y divide-ink/10">
-      <div className="flex items-center justify-between pb-4">
-        <h2 className="text-body font-bold">{t.filters.heading}</h2>
+      <div className="flex items-center justify-between py-4">
+        <h3 className="text-xs font-semibold uppercase tracking-[0.08em]">{t.filters.heading}</h3>
         {countActiveFilters(filters) > 0 && (
           <button
             type="button"
@@ -96,17 +96,6 @@ export default function FilterSidebar({ filters, options, onChange }: FilterSide
         </FilterGroup>
       )}
 
-      <FilterGroup title={t.filters.gender}>
-        {GENDERS.map((gender) => (
-          <CheckboxRow
-            key={gender}
-            label={t.filters.genders[gender]}
-            checked={filters.genders.includes(gender)}
-            onChange={() => update({ genders: toggle(filters.genders, gender) })}
-          />
-        ))}
-      </FilterGroup>
-
       <FilterGroup title={t.filters.availability}>
         <CheckboxRow
           label={t.filters.inStock}
@@ -121,7 +110,7 @@ export default function FilterSidebar({ filters, options, onChange }: FilterSide
 function FilterGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
     <fieldset className="py-4">
-      <legend className="float-left mb-3 w-full text-small font-bold">{title}</legend>
+      <legend className="float-left mb-3 w-full text-xs font-semibold uppercase tracking-[0.08em]">{title}</legend>
       <div className="clear-both flex flex-col gap-2">{children}</div>
     </fieldset>
   );

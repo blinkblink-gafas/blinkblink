@@ -11,41 +11,40 @@ export interface CategoryCardProps {
 }
 
 const backgroundClasses = {
-  primary: "bg-primary",
-  secondary: "bg-accent-pink",
-  accentBlue: "bg-accent-blue",
+  primary: "bg-primary text-ink",
+  secondary: "bg-accent-pink text-white",
+  accentBlue: "bg-accent-blue text-white",
 } as const;
 
-/** Colored image block with the category photo, then name, tagline and an arrow. */
+/** Tall color block with a cut-out frame photo and the collection name in the bottom-left corner. */
 export default function CategoryCard({ category, className }: CategoryCardProps) {
   const image = siteImages.categories[category.image];
 
   return (
-    <article
+    <Link
+      href={`/category/${category.slug}`}
       className={cn(
-        "group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-2xl bg-white ring-1 ring-ink/10 transition-shadow hover:shadow-lg hover:shadow-ink/10 sm:w-auto",
+        "group relative flex aspect-[4/5] w-[78vw] shrink-0 snap-start flex-col justify-end overflow-hidden p-5 sm:w-auto md:p-6",
+        backgroundClasses[category.bgColor],
         className
       )}
     >
-      <Link href={`/category/${category.slug}`} className="absolute inset-0 z-10" aria-label={category.name} />
-
-      <div className={cn("relative aspect-[16/10] overflow-hidden", backgroundClasses[category.bgColor])}>
+      <div className="absolute inset-x-0 top-[12%] h-[52%]">
         <Image
           src={image.url}
           alt={image.alt}
           fill
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 80vw"
-          className="object-contain p-4 photo-cutout transition-transform duration-300 group-hover:scale-105"
+          className="object-contain px-6 photo-cutout transition-transform duration-500 group-hover:scale-105"
         />
       </div>
-
-      <div className="flex items-center justify-between gap-3 px-4 py-4">
+      <div className="relative flex items-end justify-between gap-3">
         <div>
-          <h3 className="text-body font-bold text-text-primary">{category.name}</h3>
-          <p className="text-small text-text-secondary">{category.description}</p>
+          <h3 className="font-display text-[44px] font-extrabold uppercase leading-[0.9] md:text-[52px]">{category.name}</h3>
+          <p className="mt-1 text-small font-semibold">{category.description}</p>
         </div>
-        <ArrowRight aria-hidden="true" size={20} className="shrink-0 text-ink transition-transform group-hover:translate-x-1" />
+        <ArrowRight aria-hidden="true" size={26} strokeWidth={2} className="mb-1 shrink-0 transition-transform group-hover:translate-x-1" />
       </div>
-    </article>
+    </Link>
   );
 }

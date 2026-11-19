@@ -9,8 +9,7 @@ there is a stated reason not to.
 - [ ] Read `Memory.md` for the current status and known issues.
 - [ ] Find the task in `Task.md`. If it isn't there, add it first.
 - [ ] If it changes what the product does, check it against `PRD.md`.
-- [ ] If it changes anything visible, check `design.md` and the reference
-      designs.
+- [ ] If it changes anything visible, check `design.md`.
 - [ ] Read the files you are about to change, and one similar existing
       file, so the new code matches what is there.
 - [ ] Start from an up-to-date `main` on a new branch (`feat/…`, `fix/…`,
@@ -34,8 +33,8 @@ there is a stated reason not to.
 
 ## 3. General principles
 
-1. **The reference designs are the source of truth for how things look.**
-   Don't invent a new look for a page; extend the existing one.
+1. **`design.md` is the source of truth for how things look.** Don't
+   invent a new look for a page; extend the existing one.
 2. **Do what was asked, no more.** No unrequested features, refactors or
    dependencies. Suggest them instead.
 3. **Reuse before you build.** Look in `components/ui`,
@@ -153,6 +152,9 @@ downwards: pages → sections → ui → lib / store / types.
 - **Must not** show other brands' logos or names in photos or text.
 - Stock photos must be free for commercial use (currently Unsplash) and are
   placeholders until real photography exists.
+- **Must not commit or deploy third-party product photos.** The placeholder
+  product photos in `public/images/placeholder-products/` are local-only
+  and git-ignored; keep it that way until they are replaced.
 - Every meaningful image has `alt` text describing what it shows.
 
 ## 8. Git

@@ -1,41 +1,38 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Crown, Smile } from "lucide-react";
-import Button from "@/components/ui/Button";
 import Section from "@/components/ui/Section";
 import { siteImages } from "@/lib/images";
 import { useTranslation } from "@/lib/i18n";
 
-/** "Wear Your Personality" — orange banner with a model photo, between the homepage sections. */
+/** "Wear your personality" — photo beside an orange block with a big headline and one link. */
 export default function PromoBanner() {
   const t = useTranslation();
 
   return (
-    <Section className="py-6 md:py-8 lg:py-8">
-      <div className="relative isolate grid overflow-hidden rounded-2xl bg-accent-orange md:grid-cols-2">
-        <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[300px]">
+    <Section>
+      <div className="grid md:grid-cols-2">
+        <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[440px]">
           <Image
             src={siteImages.promo.url}
             alt={siteImages.promo.alt}
             fill
             sizes="(min-width: 768px) 50vw, 100vw"
-            className="object-cover md:[clip-path:polygon(0_0,100%_0,82%_100%,0_100%)]"
+            className="object-cover"
           />
         </div>
 
-        <div className="relative flex flex-col items-start justify-center gap-5 px-6 py-8 md:px-10">
-          <Crown aria-hidden="true" className="absolute right-6 top-5 h-9 w-9 rotate-12 text-primary" strokeWidth={2.5} />
-          <h2 className="text-[34px] font-black leading-[1.02] tracking-[-0.03em] text-white sm:text-5xl">
+        <div className="flex flex-col items-start justify-end gap-6 bg-accent-orange px-6 py-10 text-white md:px-10 md:py-12">
+          <h2 className="font-display text-[56px] font-extrabold uppercase leading-[0.86] sm:text-[80px]">
             {t.promo.heading.lineOne}
             <br />
-            {t.promo.heading.lineTwo}
+            <em className="italic text-ink">{t.promo.heading.lineTwo}</em>
           </h2>
-          <Button asChild variant="secondary" icon={<ArrowRight size={18} />} iconPosition="right">
-            <Link href="/category/all">{t.promo.cta}</Link>
-          </Button>
-          <span aria-hidden="true" className="absolute bottom-5 right-6 grid h-14 w-14 place-items-center rounded-full bg-primary text-ink">
-            <Smile size={36} strokeWidth={2.25} />
-          </span>
+          <Link
+            href="/category/all"
+            className="border-b-2 border-white pb-0.5 text-small font-semibold uppercase tracking-[0.08em] transition-colors hover:border-ink hover:text-ink"
+          >
+            {t.promo.cta}
+          </Link>
         </div>
       </div>
     </Section>

@@ -31,12 +31,12 @@ const variantStyles: Record<ButtonVariant, string> = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "text-small px-4 py-2 gap-1.5",
-  md: "text-body px-6 py-3 gap-2",
-  lg: "text-body px-8 py-4 gap-2.5",
+  sm: "text-xs px-4 py-2.5 gap-1.5",
+  md: "text-small px-6 py-3.5 gap-2",
+  lg: "text-small px-8 py-4 gap-2.5",
 };
 
-/** Pill-shaped button used across the site. */
+/** Square-cornered, uppercase button used across the site. */
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -52,7 +52,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const buttonClassName = cn(
-      "inline-flex items-center justify-center rounded-pill font-semibold transition-all",
+      "inline-flex items-center justify-center font-semibold uppercase tracking-[0.06em] transition-all",
       "active:scale-[0.98]",
       "disabled:pointer-events-none disabled:opacity-50",
       variantStyles[variant],

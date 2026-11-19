@@ -6,14 +6,15 @@
 
 ## 1. Product overview
 
-blink blink is an eyewear brand selling sunglasses, eyeglasses, sports
-frames and blue-light glasses directly to customers online. This project is
+blink blink is an eyewear brand selling sunglasses directly to customers
+online, in three collections: **Men**, **Women** and **Classic**. This project is
 its storefront: a website where a shopper can discover frames, compare them,
 and buy them.
 
 The brand voice is bold, playful and confident — "More than eyewear. It's a
-vibe." The site should feel like the brand: loud color blocks, big type,
-product photos front and center, and a checkout that gets out of the way.
+vibe." The site should feel like a clean, editorial fashion store in the
+blink blink colors: big condensed type, lifestyle photography, product
+photos front and center, and a checkout that gets out of the way.
 
 - **Market:** Europe; prices in euro (EUR).
 - **Language:** English today. All text lives in one file so more languages
@@ -36,15 +37,15 @@ that the team can extend without the design or the code drifting.
 
 ### Product goals
 
-1. **Find a frame fast.** A shopper can filter by shape, frame color, lens
-   color, gender, price and stock, sort the results, and share the filtered
-   page as a link.
+1. **Find a frame fast.** A shopper picks a collection (Men, Women,
+   Classic), then filters by shape, frame color, lens color, price and
+   stock, sorts the results, and can share the filtered page as a link.
 2. **Decide with confidence.** Every product page shows photos, price and
    saving, rating, colors, key details, and delivery and returns terms.
 3. **Buy without friction.** Add to Cart from anywhere, a cart that survives
    a page reload, and a short checkout. "Buy Now" goes straight to checkout.
-4. **Feel like blink blink.** Every page follows the approved reference
-   designs (see `design.md`).
+4. **Feel like blink blink.** Every page follows the editorial design
+   system in `design.md`.
 5. **Work on a phone.** Every page is usable at 375px wide with no sideways
    scrolling.
 
@@ -74,9 +75,9 @@ They shop on their phone, discover brands on social media, care about look
 and price, and often buy more than one pair. They expect a fast, visual
 site and will leave if it feels slow or dull.
 
-**Secondary — practical buyers.** People who need everyday eyeglasses,
-blue-light glasses for screen work, or sports frames. They care more about
-clear specs, price, and delivery and returns terms than about brand energy.
+**Secondary — practical buyers.** People who want one reliable everyday
+pair, often from the Classic collection. They care more about clear specs,
+price, and delivery and returns terms than about brand energy.
 
 **Internal — the blink blink team.** They need to change products, photos,
 prices, copy and store policies without a developer rewriting components.
@@ -86,11 +87,12 @@ Today that means editing a few clearly named files (see `Architecture.md`).
 
 ### In scope today (built)
 
-- Homepage: hero, trust badges, category cards, promo banner, best sellers,
-  newsletter signup.
-- Category listings with shape tabs, filter sidebar, sorting and pagination.
-- Product pages with gallery, colors, quantity, Add to Cart, Buy Now, tabs,
-  related products.
+- Homepage: photo hero, selling-points strip, best-sellers and new-in
+  carousels, Men / Women / Classic tiles, promo banner, newsletter signup.
+- Collection listings (Men, Women, Classic, All) with shape tabs, a
+  "Filter and sort" panel, sorting and pagination.
+- Product pages with gallery, color and lenses, quantity, Add to Cart, Buy
+  Now, expandable details, related products.
 - Search, wishlist, cart drawer, cart page.
 - Checkout form with validation and an order confirmation — **demo only, no
   payment is taken**.
@@ -104,7 +106,9 @@ Today that means editing a few clearly named files (see `Architecture.md`).
 - A connected email service for the newsletter.
 - Legal and help pages (privacy, terms, cookies, FAQ, shipping, returns,
   size guide, contact).
-- Real product photography and final brand assets (logo file, exact colors).
+- Real product photography (the current product photos are local-only
+  placeholders that must not be published) and final brand assets (logo
+  file, exact colors).
 - More languages and currencies.
 
 ## 6. Open decisions for the business

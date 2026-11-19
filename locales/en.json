@@ -11,13 +11,15 @@
     "close": "Close",
     "remove": "Remove",
     "discount": "-{percent}%",
-    "home": "Home"
+    "home": "Home",
+    "soldOut": "Sold out",
+    "quickAdd": "Add {name} to cart"
   },
   "navbar": {
     "links": {
-      "sunglasses": "Sunglasses",
-      "eyeglasses": "Eyeglasses",
-      "sports": "Sports",
+      "men": "Men",
+      "women": "Women",
+      "classic": "Classic",
       "shopAll": "Shop All",
       "about": "About"
     },
@@ -43,46 +45,18 @@
       "lineTwo": "It's a vibe."
     },
     "subtext": "Stylish. Bold. Made for your everyday.",
-    "cta": "Shop Now",
-    "sticker": {
-      "lineOne": "Good things",
-      "lineTwo": "ahead"
-    }
-  },
-  "trustBadges": {
-    "trendyDesigns": {
-      "title": "Trendy Designs",
-      "subtitle": "For every mood"
-    },
-    "uvProtection": {
-      "title": "UV Protection",
-      "subtitle": "See the brighter side"
-    },
-    "premiumQuality": {
-      "title": "Premium Quality",
-      "subtitle": "Built to last"
-    },
-    "freeDelivery": {
-      "title": "Free Delivery",
-      "subtitle": "On orders over {amount}"
-    }
+    "cta": "Shop now"
   },
   "shopByCategory": {
-    "heading": "Shop by Category",
+    "heading": {
+      "lead": "Shop by",
+      "accent": "collection"
+    },
     "viewAll": "View All",
-    "categories": {
-      "sunglasses": {
-        "name": "Sunglasses",
-        "description": "Style for every sun"
-      },
-      "eyeglasses": {
-        "name": "Eyeglasses",
-        "description": "Clear vision, bold style"
-      },
-      "sports": {
-        "name": "Sports",
-        "description": "Performance meets style"
-      }
+    "descriptions": {
+      "men": "Bold lines, big attitude",
+      "women": "Cat-eyes, ovals and more",
+      "classic": "Timeless shapes, every day"
     }
   },
   "productBadges": {
@@ -99,28 +73,22 @@
     "browseAll": "Browse all styles",
     "subtitles": {
       "all": "Every frame we make. Find your perfect pair.",
-      "sunglasses": "Style for every sun. Find your perfect pair.",
-      "eyeglasses": "Clear vision, bold style. Find your perfect pair.",
-      "sports": "Performance meets style. Built to keep up.",
-      "blue-light": "Kinder on your eyes during long screen days.",
-      "accessories": "The finishing touches."
+      "men": "Bold squares, aviators and sharp lines.",
+      "women": "Cat-eyes, ovals and statement shapes.",
+      "classic": "Timeless frames that go with everything."
     },
     "breadcrumb": "Breadcrumb"
   },
   "productPage": {
-    "frameColor": "Frame Color",
     "quantityLabel": "Quantity",
     "reviewsLabel": "{count} reviews",
     "decreaseQuantity": "Decrease quantity",
     "increaseQuantity": "Increase quantity",
-    "relatedHeading": "You might also like",
-    "youSave": "You save {amount} ({percent}%)",
-    "showImage": "Show image {index}",
-    "tabs": {
-      "details": "Details",
-      "shipping": "Shipping",
-      "returns": "Returns"
+    "relatedHeading": {
+      "lead": "You may",
+      "accent": "also like"
     },
+    "youSave": "You save {amount} ({percent}%)",
     "shippingText": "Free delivery on orders over {amount}. Smaller orders get a flat shipping rate, shown at checkout.",
     "returnsText": "Changed your mind? Send unworn frames back within {days} days for a full refund.",
     "trust": {
@@ -136,6 +104,14 @@
         "title": "Secure Checkout",
         "subtitle": "Your details stay private"
       }
+    },
+    "colorLabel": "Color",
+    "lensLabel": "Lenses",
+    "sections": {
+      "description": "Description",
+      "details": "Details",
+      "shipping": "Shipping",
+      "returns": "Returns"
     }
   },
   "pages": {
@@ -177,11 +153,9 @@
   },
   "categories": {
     "all": "All Styles",
-    "sunglasses": "Sunglasses",
-    "eyeglasses": "Eyeglasses",
-    "sports": "Sports",
-    "blue-light": "Blue Light",
-    "accessories": "Accessories"
+    "men": "Men",
+    "women": "Women",
+    "classic": "Classic"
   },
   "filters": {
     "heading": "Filters",
@@ -200,12 +174,6 @@
     "frameColor": "Frame Color",
     "lensColor": "Lens Color",
     "frameShape": "Frame Shape",
-    "gender": "Gender",
-    "genders": {
-      "men": "Men",
-      "women": "Women",
-      "unisex": "Unisex"
-    },
     "availability": "Availability",
     "inStock": "In Stock",
     "clear": "Clear all",
@@ -214,7 +182,8 @@
     "close": "Close filters",
     "showResults": "Show {count} results",
     "noResultsHeading": "No matches",
-    "noResultsMessage": "Nothing matches those filters. Try removing one."
+    "noResultsMessage": "Nothing matches those filters. Try removing one.",
+    "filterAndSort": "Filter and sort"
   },
   "cart": {
     "heading": "Your Cart",
@@ -319,7 +288,10 @@
     "back": "Back to home"
   },
   "bestSellers": {
-    "heading": "Best Sellers"
+    "heading": {
+      "lead": "Our",
+      "accent": "best-sellers"
+    }
   },
   "promo": {
     "heading": {
@@ -339,13 +311,13 @@
   },
   "shapes": {
     "all": "All",
-    "aviator": "Aviator",
-    "wayfarer": "Wayfarer",
-    "round": "Round",
     "square": "Square",
     "rectangle": "Rectangle",
+    "round": "Round",
+    "oval": "Oval",
     "cat-eye": "Cat Eye",
-    "sport": "Sport"
+    "aviator": "Aviator",
+    "geometric": "Geometric"
   },
   "pagination": {
     "label": "Pagination",
@@ -353,12 +325,24 @@
     "next": "Next page",
     "page": "Page {page}"
   },
-  "brighterSide": {
+  "announcement": "Free delivery on orders over {amount} · {days}-day returns",
+  "marquee": [
+    "UV400 protection",
+    "Free delivery over {amount}",
+    "{days}-day returns"
+  ],
+  "newIn": {
     "heading": {
-      "lineOne": "See the",
-      "lineTwo": "Brighter",
-      "lineThree": "Side"
-    },
-    "cta": "Shop sunglasses"
+      "lead": "New",
+      "accent": "in"
+    }
+  },
+  "carousel": {
+    "previous": "Scroll back",
+    "next": "Scroll forward"
+  },
+  "editorial": {
+    "lineOne": "Made for",
+    "lineTwo": "sunny days"
   }
 }

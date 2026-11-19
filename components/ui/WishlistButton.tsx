@@ -13,7 +13,7 @@ export interface WishlistButtonProps {
 }
 
 /** Heart toggle wired to `wishlistSlice`; saved across visits by store/persistence.ts. */
-export default function WishlistButton({ productId, className, size = 16 }: WishlistButtonProps) {
+export default function WishlistButton({ productId, className, size = 18 }: WishlistButtonProps) {
   const dispatch = useAppDispatch();
   const isWishlisted = useAppSelector(selectIsWishlisted(productId));
   const t = useTranslation();
@@ -27,12 +27,12 @@ export default function WishlistButton({ productId, className, size = 16 }: Wish
       animate={{ scale: isWishlisted ? [1, 1.2, 0.96, 1] : 1 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "flex items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-ink/10",
+        "flex items-center justify-center transition-opacity hover:opacity-70",
         isWishlisted ? "text-accent-pink" : "text-ink",
         className
       )}
     >
-      <Heart size={size} fill={isWishlisted ? "currentColor" : "none"} />
+      <Heart size={size} strokeWidth={1.75} fill={isWishlisted ? "currentColor" : "none"} />
     </motion.button>
   );
 }

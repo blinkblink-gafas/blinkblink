@@ -16,7 +16,7 @@ const product = (overrides: Partial<Product>): Product => ({
   id: "x",
   slug: "x",
   name: "X",
-  category: "sunglasses",
+  category: "men",
   price: 40,
   currency: "EUR",
   rating: 4,
@@ -25,16 +25,15 @@ const product = (overrides: Partial<Product>): Product => ({
   colors: ["Jet Black"],
   lensColors: ["Black"],
   shape: "square",
-  gender: "unisex",
   features: [],
   inStock: true,
   ...overrides,
 });
 
 const products = [
-  product({ id: "a", price: 38, rating: 4.6, colors: ["Jet Black", "Tortoise"], shape: "wayfarer", gender: "men" }),
-  product({ id: "b", price: 32, rating: 4.4, colors: ["Gold"], lensColors: ["Green"], shape: "round", badges: ["New"], gender: "women" }),
-  product({ id: "c", price: 46, rating: 4.8, colors: ["Jet Black"], shape: "sport", inStock: false }),
+  product({ id: "a", price: 38, rating: 4.6, colors: ["Jet Black", "Tortoise"], shape: "rectangle" }),
+  product({ id: "b", price: 32, rating: 4.4, colors: ["Gold"], lensColors: ["Green"], shape: "round", badges: ["New"] }),
+  product({ id: "c", price: 46, rating: 4.8, colors: ["Jet Black"], shape: "aviator", inStock: false }),
 ];
 
 const ids = (list: Product[]) => list.map((p) => p.id);
@@ -47,7 +46,6 @@ describe("parseFilters / filtersToQuery", () => {
       shape: "round,square",
       color: "Jet Black,Gold",
       lens: "Green",
-      gender: "women",
       price: "30-45",
       stock: "1",
       sort: "price-asc",
@@ -59,7 +57,6 @@ describe("parseFilters / filtersToQuery", () => {
       shapes: ["round", "square"],
       frameColors: ["Jet Black", "Gold"],
       lensColors: ["Green"],
-      genders: ["women"],
       priceRange: { min: 30, max: 45 },
       inStockOnly: true,
       sortBy: "price-asc",
@@ -69,7 +66,7 @@ describe("parseFilters / filtersToQuery", () => {
   });
 
   it("drops unknown values and omits defaults", () => {
-    const filters = parseFilters({ sort: "bogus", shape: "blob", gender: "robot", price: "50-10", page: "0", stock: "yes" });
+    const filters = parseFilters({ sort: "bogus", shape: "blob", price: "50-10", page: "0", stock: "yes" });
     expect(filters).toEqual(DEFAULT_FILTERS);
     expect(filtersToQuery(filters)).toEqual({});
   });
@@ -93,14 +90,13 @@ describe("applyFilters", () => {
 
   it("matches any selected value within a filter", () => {
     expect(withFilters({ frameColors: ["Tortoise", "Gold"] })).toEqual(["a", "b"]);
-    expect(withFilters({ shapes: ["round", "sport"] })).toEqual(["b", "c"]);
+    expect(withFilters({ shapes: ["round", "aviator"] })).toEqual(["b", "c"]);
     expect(withFilters({ lensColors: ["Green"] })).toEqual(["b"]);
-    expect(withFilters({ genders: ["men"] })).toEqual(["a"]);
   });
 
   it("combines filters with AND", () => {
-    expect(withFilters({ frameColors: ["Jet Black"], shapes: ["sport"] })).toEqual(["c"]);
-    expect(withFilters({ frameColors: ["Gold"], genders: ["men"] })).toEqual([]);
+    expect(withFilters({ frameColors: ["Jet Black"], shapes: ["aviator"] })).toEqual(["c"]);
+    expect(withFilters({ frameColors: ["Gold"], shapes: ["rectangle"] })).toEqual([]);
   });
 
   it("filters by an inclusive price range and by stock", () => {

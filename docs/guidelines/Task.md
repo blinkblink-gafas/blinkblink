@@ -64,12 +64,34 @@ Goal: every page matches the Home, Category and Product reference designs.
 - [x] `lib/images.ts` for site photos, `lib/storeConfig.ts` for policies
 - [x] Merged to `main` (pull request #2)
 
-## Phase 4 — Improvements 🔜 next
+## Phase 4 — Editorial redesign and new collections 🚧 in progress
 
-Goal: to be defined by the product owner.
+Goal: an editorial store look (layout inspired by premium fashion eyewear
+sites) in the unchanged blink blink colors, with the range reorganised into
+Men, Women and Classic.
 
 - [x] Development guidelines (`docs/guidelines/`)
-- [ ] _Improvements list — to be added here before work starts_
+- [x] Collections: Sunglasses / Eyeglasses / Sports replaced by Men, Women,
+      Classic (types, catalog, routes, nav, footer, tiles); gender filter
+      removed (the collection does that job)
+- [x] Catalog: 48 placeholder products with new shapes (oval, geometric);
+      photos local-only and git-ignored
+- [x] Look: condensed display font (Barlow Condensed), light-gray page with
+      white tiles, square corners, uppercase buttons and labels; unused
+      comic shadows, thick borders and old type scale removed
+- [x] Header: yellow announcement bar, light header, collection links row
+- [x] Homepage: photo hero, marquee strip, best-sellers and new-in carousels,
+      collection tiles, promo banner, newsletter
+- [x] Listing: collection color banner, underlined shape tabs, "Filter and
+      sort" slide-in panel, 4-column grid, editorial tile, 12 per page
+- [x] Product page: photo + color tile gallery, sticky buy panel,
+      expandable Description / Details / Shipping / Returns, "You may also
+      like" carousel
+- [x] Product card: quick-add bag icon, 40px icon tap targets
+- [x] Search also matches shape and lens color
+- [ ] Replace placeholder product photos with own photography (blocks
+      launch)
+- [ ] Merge to `main`
 
 ## Backlog (not scheduled)
 
@@ -102,8 +124,5 @@ Roughly in the order they unblock a real launch.
 - [ ] ESLint configuration (the project has none; `yarn lint` prompts)
 - [ ] End-to-end test of browse → add to cart → checkout
 - [ ] Continuous integration: typecheck, test and build on every pull request
-- [ ] Remove unused Tailwind theme entries (old type scale, comic shadows,
-      thick border widths)
 - [ ] Singular/plural for the Navbar cart and wishlist screen-reader labels
-- [ ] Enlarge the product-card wishlist heart to a 40px tap target
 - [ ] Analytics and performance monitoring

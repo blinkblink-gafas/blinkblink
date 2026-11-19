@@ -15,7 +15,7 @@ export default function Pagination({ page, totalPages, onChange }: PaginationPro
 
   const pages = visiblePages(page, totalPages);
   const arrow =
-    "grid h-9 w-9 place-items-center rounded-full text-ink transition-colors hover:bg-surface disabled:pointer-events-none disabled:opacity-30";
+    "grid h-10 w-10 place-items-center text-ink transition-colors hover:bg-white disabled:pointer-events-none disabled:opacity-30";
 
   return (
     <nav aria-label={t.pagination.label} className="mt-10 flex items-center justify-center gap-1.5">
@@ -36,8 +36,8 @@ export default function Pagination({ page, totalPages, onChange }: PaginationPro
             aria-current={item === page ? "page" : undefined}
             onClick={() => onChange(item)}
             className={cn(
-              "h-9 min-w-9 rounded-full px-2 text-small font-semibold transition-colors",
-              item === page ? "bg-ink text-white" : "text-ink hover:bg-surface"
+              "h-10 min-w-10 px-2 text-small font-semibold transition-colors",
+              item === page ? "bg-ink text-white" : "text-ink hover:bg-white"
             )}
           >
             {item}

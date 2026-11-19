@@ -1,16 +1,14 @@
 import type { ParsedUrlQuery } from "querystring";
 import type { FilterState, PriceRange, SortOption } from "@/types/filters";
-import type { FrameShape, Product, ProductGender } from "@/types/product";
+import type { FrameShape, Product } from "@/types/product";
 
 export const SORT_OPTIONS: SortOption[] = ["featured", "price-asc", "price-desc", "newest", "rating"];
-export const FRAME_SHAPES: FrameShape[] = ["aviator", "wayfarer", "round", "square", "rectangle", "cat-eye", "sport"];
-export const GENDERS: ProductGender[] = ["men", "women", "unisex"];
+export const FRAME_SHAPES: FrameShape[] = ["square", "rectangle", "round", "oval", "cat-eye", "aviator", "geometric"];
 
 export const DEFAULT_FILTERS: FilterState = {
   shapes: [],
   frameColors: [],
   lensColors: [],
-  genders: [],
   priceRange: null,
   inStockOnly: false,
   sortBy: "featured",
@@ -40,7 +38,7 @@ function parsePrice(value: string | undefined): PriceRange | null {
 
 /**
  * Reads filters from the URL query, e.g.
- * `?shape=round,square&color=Gold&lens=Green&gender=women&price=30-45&stock=1&sort=price-asc&page=2`,
+ * `?shape=round,square&color=Gold&lens=Green&price=30-45&stock=1&sort=price-asc&page=2`,
  * so filtered views are shareable and survive back/forward navigation.
  */
 export function parseFilters(query: ParsedUrlQuery): FilterState {
@@ -51,7 +49,6 @@ export function parseFilters(query: ParsedUrlQuery): FilterState {
     shapes: listOf(query.shape, FRAME_SHAPES),
     frameColors: list(query.color),
     lensColors: list(query.lens),
-    genders: listOf(query.gender, GENDERS),
     priceRange: parsePrice(firstValue(query.price)),
     inStockOnly: firstValue(query.stock) === "1",
     sortBy: SORT_OPTIONS.includes(sort as SortOption) ? (sort as SortOption) : "featured",
@@ -67,7 +64,6 @@ export function filtersToQuery(filters: FilterState): Record<string, string> {
   if (filters.shapes.length > 0) query.shape = filters.shapes.join(",");
   if (filters.frameColors.length > 0) query.color = filters.frameColors.join(",");
   if (filters.lensColors.length > 0) query.lens = filters.lensColors.join(",");
-  if (filters.genders.length > 0) query.gender = filters.genders.join(",");
   if (filters.priceRange) query.price = `${filters.priceRange.min}-${filters.priceRange.max}`;
   if (filters.inStockOnly) query.stock = "1";
   if (filters.sortBy !== "featured") query.sort = filters.sortBy;
@@ -81,7 +77,6 @@ export function countActiveFilters(filters: FilterState): number {
     filters.shapes.length +
     filters.frameColors.length +
     filters.lensColors.length +
-    filters.genders.length +
     (filters.priceRange ? 1 : 0) +
     (filters.inStockOnly ? 1 : 0)
   );
@@ -96,14 +91,13 @@ const matchesAny = <T>(selected: T[], values: T[]) =>
   selected.length === 0 || values.some((value) => selected.includes(value));
 
 export function applyFilters(products: Product[], filters: FilterState): Product[] {
-  const { shapes, frameColors, lensColors, genders, priceRange, inStockOnly, sortBy } = filters;
+  const { shapes, frameColors, lensColors, priceRange, inStockOnly, sortBy } = filters;
 
   const filtered = products.filter(
     (product) =>
       matchesAny(shapes, [product.shape]) &&
       matchesAny(frameColors, product.colors) &&
       matchesAny(lensColors, product.lensColors) &&
-      matchesAny(genders, [product.gender]) &&
       (!priceRange || (product.price >= priceRange.min && product.price <= priceRange.max)) &&
       (!inStockOnly || product.inStock)
   );

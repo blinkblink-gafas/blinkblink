@@ -1,8 +1,6 @@
 import { useState, type FormEvent } from "react";
-import Image from "next/image";
-import { ArrowRight, Check, Crown } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import Section from "@/components/ui/Section";
-import { siteImages } from "@/lib/images";
 import { isValidEmail } from "@/lib/checkout";
 import { useTranslation } from "@/lib/i18n";
 
@@ -29,21 +27,21 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <Section className="pb-12 pt-6 md:pb-16 md:pt-8 lg:pb-16 lg:pt-8">
-      <div className="relative isolate grid items-center gap-6 overflow-hidden rounded-2xl bg-accent-pink px-6 py-8 md:grid-cols-[1fr_1.1fr_auto] md:px-10">
+    <Section>
+      <div className="grid items-end gap-6 bg-accent-pink px-6 py-10 text-white md:grid-cols-2 md:px-10 md:py-12">
         <div>
-          <h2 className="text-2xl font-black tracking-[-0.02em] text-white sm:text-3xl">{t.newsletter.heading}</h2>
-          <p className="mt-1 text-small text-white/90">{t.newsletter.body}</p>
+          <h2 className="font-display text-[44px] font-extrabold uppercase leading-[0.9] sm:text-[56px]">{t.newsletter.heading}</h2>
+          <p className="mt-2 text-small">{t.newsletter.body}</p>
         </div>
 
         {isSubscribed ? (
-          <p role="status" className="flex items-center gap-2 rounded-pill bg-white px-5 py-3 text-small font-semibold text-ink">
+          <p role="status" className="flex items-center gap-2 bg-white px-5 py-4 text-small font-semibold text-ink">
             <Check size={18} className="shrink-0 text-accent-pink" aria-hidden="true" />
             {t.newsletter.success}
           </p>
         ) : (
           <form noValidate onSubmit={handleSubmit}>
-            <div className="flex items-center rounded-pill bg-white p-1.5 pl-5">
+            <div className="flex items-center border-b-2 border-white">
               <label htmlFor="newsletter-email" className="sr-only">
                 {t.newsletter.emailLabel}
               </label>
@@ -59,28 +57,23 @@ export default function NewsletterSignup() {
                 placeholder={t.newsletter.placeholder}
                 aria-invalid={Boolean(error)}
                 aria-describedby={error ? "newsletter-error" : undefined}
-                className="min-w-0 flex-1 bg-transparent text-small text-ink outline-none placeholder:text-text-secondary"
+                className="min-w-0 flex-1 bg-transparent py-3 text-body text-white outline-none placeholder:text-white/75"
               />
               <button
                 type="submit"
                 aria-label={t.newsletter.submit}
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-white transition-colors hover:bg-ink/85"
+                className="grid h-11 w-11 shrink-0 place-items-center text-white transition-transform hover:translate-x-1"
               >
-                <ArrowRight size={18} />
+                <ArrowRight size={22} />
               </button>
             </div>
             {error && (
-              <p id="newsletter-error" className="mt-2 pl-5 text-small font-semibold text-white">
+              <p id="newsletter-error" className="mt-2 text-small font-semibold text-white">
                 {error}
               </p>
             )}
           </form>
         )}
-
-        <div aria-hidden="true" className="relative hidden h-28 w-44 md:block">
-          <Crown className="absolute -top-2 left-2 h-8 w-8 -rotate-12 text-primary" strokeWidth={2.5} />
-          <Image src={siteImages.newsletter.url} alt="" fill sizes="176px" className="object-contain photo-cutout" />
-        </div>
       </div>
     </Section>
   );

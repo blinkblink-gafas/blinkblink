@@ -72,16 +72,17 @@ pages/                 One file per route
 
 components/
   layout/                Site-wide chrome: Navbar, Footer, CartDrawer, Seo, Layout
-  sections/              Page-sized blocks: Hero, ShopByCategory, PromoBanner,
-                         ProductGrid, ProductListing, FilterSidebar, ProductTabs,
-                         NewsletterSignup, BrighterSideBanner
+  sections/              Page-sized blocks: Hero, Marquee, ProductCarousel,
+                         ShopByCategory, PromoBanner, NewsletterSignup, ProductGrid,
+                         ProductListing, FilterSidebar, ProductAccordion
   ui/                    Small reusable pieces: Button, Badge, Rating, ProductCard,
-                         CategoryCard, Breadcrumbs, Pagination, PriceRangeSlider,
-                         WishlistButton, CartLineItem, EmptyState, BrandLogo, …
+                         CategoryCard, EditorialTile, SectionHeading, Breadcrumbs,
+                         Pagination, PriceRangeSlider, WishlistButton, CartLineItem,
+                         EmptyState, BrandLogo, …
 
 lib/                   Logic with no JSX
   catalog.ts             Server data access (the only reader of mockData)
-  mockData.ts            Mock products and categories
+  mockData.ts            Mock products (48, in Men / Women / Classic) and categories
   filters.ts             Parse / apply / serialize filters, pagination
   useUrlFilters.ts       Hook: filters ⇄ URL query
   checkout.ts            Form validation, order id
@@ -101,6 +102,7 @@ types/                 Shared TypeScript types (Product, CartItem, FilterState, 
 locales/en.json        Every user-facing string
 styles/globals.css     Tailwind layers, color variables, a few global classes
 public/images/         Your own photos go here
+  placeholder-products/  Local-only placeholder product photos (git-ignored)
 docs/guidelines/       These documents
 ```
 
@@ -132,7 +134,7 @@ unknown product slugs return 404; new products render on first request.
 All listing state lives in the **URL**, not in Redux:
 
 ```
-/category/sunglasses?shape=round&color=Gold&price=30-45&sort=price-asc&page=2
+/category/men?shape=round&color=Gold&price=30-45&sort=price-asc&page=2
 ```
 
 `useUrlFilters()` reads the query into a `FilterState` and writes changes
@@ -184,7 +186,12 @@ Home ─▶ Category (filter, sort, paginate) ─▶ Product ─▶ Add to Cart 
 ```
 
 **Search:** Navbar search → `/search?q=…` → `/api/products?q=…` → same
-`ProductListing` as category pages.
+`ProductListing` as category pages. Search matches name, collection, shape,
+description, frame color and lens color.
+
+**Collections:** `ProductCategory` is `"men" | "women" | "classic"`. Each
+has a listing page at `/category/<slug>`, plus `/category/all`. Any other
+slug is a 404.
 
 **Wishlist:** heart on any card or product page → `wishlistSlice` →
 `/wishlist` loads the saved products through the API.

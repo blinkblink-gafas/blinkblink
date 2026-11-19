@@ -1,4 +1,4 @@
-export type CategoryImage = "sunglasses" | "eyeglasses" | "sports";
+export type CategoryImage = "men" | "women" | "classic";
 export type CategoryBackground = "primary" | "secondary" | "accentBlue";
 
 export interface Category {

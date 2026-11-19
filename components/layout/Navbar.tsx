@@ -7,7 +7,8 @@ import { openCart, selectCartTotalItems } from "@/store/slices/cartSlice";
 import { selectWishlistCount } from "@/store/slices/wishlistSlice";
 import BrandLogo from "@/components/ui/BrandLogo";
 import { formatTranslation, useTranslation } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
+import { storeConfig } from "@/lib/storeConfig";
+import { cn, formatPrice } from "@/lib/utils";
 import type { LocaleStrings } from "@/types/locales";
 
 export interface NavbarProps {
@@ -15,13 +16,17 @@ export interface NavbarProps {
 }
 
 const navigation: Array<{ key: keyof LocaleStrings["navbar"]["links"]; href: string }> = [
-  { key: "sunglasses", href: "/category/sunglasses" },
-  { key: "eyeglasses", href: "/category/eyeglasses" },
-  { key: "sports", href: "/category/sports" },
+  { key: "men", href: "/category/men" },
+  { key: "women", href: "/category/women" },
+  { key: "classic", href: "/category/classic" },
   { key: "shopAll", href: "/category/all" },
   { key: "about", href: "/about" },
 ];
 
+/**
+ * Site header: yellow announcement bar, then logo + icon buttons, then the
+ * collection links on their own row (desktop) or behind a menu button (phone).
+ */
 export default function Navbar({ cartCount }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -55,52 +60,93 @@ export default function Navbar({ cartCount }: NavbarProps) {
     void router.push({ pathname: "/search", query: { q } });
   };
 
-  const iconButton = "relative inline-flex rounded-full p-2 text-white transition-colors hover:bg-white/10";
+  const isActive = (href: string) => router.asPath.split("?")[0] === href;
+  const iconButton = "relative inline-flex h-10 w-10 items-center justify-center text-ink transition-opacity hover:opacity-60";
 
   return (
-    <header className="sticky top-0 z-50 bg-ink text-white">
-      <nav aria-label={t.navbar.aria.mainNavigation} className="mx-auto grid h-16 max-w-section grid-cols-[auto_1fr_auto] items-center gap-4 px-4 md:h-[72px] md:px-8 lg:px-12">
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center md:hidden"
-            aria-label={isOpen ? t.navbar.aria.closeMenu : t.navbar.aria.openMenu}
-            aria-expanded={isOpen}
-            onClick={() => setIsOpen((open) => !open)}
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-          <Link href="/" aria-label={t.navbar.aria.home}>
-            <BrandLogo />
-          </Link>
+    <header className="sticky top-0 z-50 border-b border-ink/10 bg-surface">
+      <p className="bg-primary px-4 py-2 text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-ink">
+        {formatTranslation(t.announcement, {
+          amount: formatPrice(storeConfig.freeShippingThreshold),
+          days: storeConfig.returnDays,
+        })}
+      </p>
+
+      <nav aria-label={t.navbar.aria.mainNavigation} className="mx-auto max-w-section px-4 md:px-8 lg:px-12">
+        <div className="flex h-16 items-center justify-between gap-4">
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              className="-ml-2 inline-flex h-10 w-10 items-center justify-center md:hidden"
+              aria-label={isOpen ? t.navbar.aria.closeMenu : t.navbar.aria.openMenu}
+              aria-expanded={isOpen}
+              onClick={() => setIsOpen((open) => !open)}
+            >
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
+            <Link href="/" aria-label={t.navbar.aria.home}>
+              <BrandLogo />
+            </Link>
+          </div>
+
+          <div className="-mr-2 flex items-center">
+            <button
+              type="button"
+              aria-label={t.navbar.aria.search}
+              aria-expanded={isSearchOpen}
+              aria-controls="navbar-search"
+              onClick={() => setIsSearchOpen((open) => !open)}
+              className={iconButton}
+            >
+              <Search size={20} strokeWidth={1.75} />
+            </button>
+            <Link href="/account" aria-label={t.navbar.aria.account} className={cn(iconButton, "hidden sm:inline-flex")}>
+              <UserRound size={20} strokeWidth={1.75} />
+            </Link>
+            <Link
+              href="/wishlist"
+              aria-label={formatTranslation(t.navbar.aria.wishlistWithCount, { count: wishlistCount })}
+              className={cn(iconButton, "hidden sm:inline-flex")}
+            >
+              <Heart size={20} strokeWidth={1.75} />
+              {wishlistCount > 0 && <CountBadge count={wishlistCount} />}
+            </Link>
+            <button
+              type="button"
+              onClick={() => dispatch(openCart())}
+              aria-label={formatTranslation(t.navbar.aria.cartWithCount, { count: itemCount })}
+              className={iconButton}
+            >
+              <ShoppingBag size={20} strokeWidth={1.75} />
+              {itemCount > 0 && <CountBadge count={itemCount} />}
+            </button>
+          </div>
         </div>
 
-        <div className="hidden items-center justify-center gap-8 md:flex">
+        <div className="hidden h-11 items-center gap-7 md:flex">
           {navigation.map(({ key, href }) => (
-            <Link key={key} href={href} className="text-small font-semibold text-white/90 transition-colors hover:text-primary">
+            <Link
+              key={key}
+              href={href}
+              aria-current={isActive(href) ? "page" : undefined}
+              className={cn(
+                "border-b-2 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-ink transition-colors",
+                isActive(href) ? "border-ink" : "border-transparent hover:border-ink/40"
+              )}
+            >
               {t.navbar.links[key]}
             </Link>
           ))}
         </div>
-
-        <div className="flex items-center gap-0.5 justify-self-end sm:gap-1.5">
-          <button type="button" aria-label={t.navbar.aria.search} aria-expanded={isSearchOpen} aria-controls="navbar-search" onClick={() => setIsSearchOpen((open) => !open)} className={iconButton}><Search size={20} /></button>
-          <Link href="/account" aria-label={t.navbar.aria.account} className={cn(iconButton, "hidden sm:inline-flex")}><UserRound size={20} /></Link>
-          <Link href="/wishlist" aria-label={formatTranslation(t.navbar.aria.wishlistWithCount, { count: wishlistCount })} className={cn(iconButton, "hidden sm:inline-flex")}>
-            <Heart size={20} />
-            {wishlistCount > 0 && <CountBadge count={wishlistCount} />}
-          </Link>
-          <button type="button" onClick={() => dispatch(openCart())} aria-label={formatTranslation(t.navbar.aria.cartWithCount, { count: itemCount })} className={cn(iconButton, "text-primary")}>
-            <ShoppingBag size={21} />
-            {itemCount > 0 && <CountBadge count={itemCount} />}
-          </button>
-        </div>
       </nav>
 
       {isSearchOpen && (
-        <div id="navbar-search" className="border-t border-white/10 bg-ink px-4 py-4 md:px-8 lg:px-12">
+        <div id="navbar-search" className="border-t border-ink/10 bg-white px-4 py-4 md:px-8 lg:px-12">
           <form role="search" onSubmit={handleSearchSubmit} className="mx-auto flex max-w-section items-center gap-3">
-            <label htmlFor="navbar-search-input" className="sr-only">{t.navbar.search.submit}</label>
+            <label htmlFor="navbar-search-input" className="sr-only">
+              {t.navbar.search.submit}
+            </label>
+            <Search size={20} strokeWidth={1.75} aria-hidden="true" className="shrink-0 text-ink" />
             <input
               ref={searchInputRef}
               id="navbar-search-input"
@@ -109,33 +155,44 @@ export default function Navbar({ cartCount }: NavbarProps) {
               onChange={(event) => setSearchQuery(event.target.value)}
               onKeyDown={(event) => event.key === "Escape" && setIsSearchOpen(false)}
               placeholder={t.navbar.search.placeholder}
-              className="min-w-0 flex-1 rounded-pill bg-white px-5 py-2.5 text-body text-ink outline-none placeholder:text-text-secondary focus-visible:ring-2 focus-visible:ring-primary"
+              className="min-w-0 flex-1 border-b border-ink/20 bg-transparent py-2 text-body text-ink outline-none placeholder:text-text-secondary focus-visible:border-ink"
             />
-            <button type="submit" className="rounded-pill bg-primary px-5 py-2.5 font-semibold text-ink hover:brightness-95">
+            <button type="submit" className="bg-ink px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.06em] text-white hover:bg-ink/85">
               {t.navbar.search.submit}
             </button>
-            <button type="button" aria-label={t.navbar.search.close} onClick={() => setIsSearchOpen(false)} className="inline-flex h-10 w-10 shrink-0 items-center justify-center">
-              <X size={22} />
+            <button
+              type="button"
+              aria-label={t.navbar.search.close}
+              onClick={() => setIsSearchOpen(false)}
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center"
+            >
+              <X size={20} />
             </button>
           </form>
         </div>
       )}
 
       {isOpen && (
-        <div className="border-t border-white/10 bg-ink px-4 py-5 md:hidden">
-          <div className="flex flex-col gap-4">
+        <div className="border-t border-ink/10 bg-surface px-4 pb-6 pt-2 md:hidden">
+          <ul className="flex flex-col divide-y divide-ink/10">
             {navigation.map(({ key, href }) => (
-              <Link key={key} href={href} onClick={() => setIsOpen(false)} className="text-lg font-semibold hover:text-primary">
-                {t.navbar.links[key]}
-              </Link>
+              <li key={key}>
+                <Link href={href} className="block py-3.5 font-display text-2xl font-bold uppercase text-ink">
+                  {t.navbar.links[key]}
+                </Link>
+              </li>
             ))}
-            <Link href="/wishlist" className="text-lg font-semibold hover:text-primary">
-              {t.footer.links.wishlist}
-            </Link>
-            <Link href="/account" className="text-lg font-semibold hover:text-primary">
-              {t.footer.links.account}
-            </Link>
-          </div>
+            <li>
+              <Link href="/wishlist" className="block py-3.5 text-small font-semibold uppercase tracking-[0.06em] text-ink">
+                {t.footer.links.wishlist}
+              </Link>
+            </li>
+            <li>
+              <Link href="/account" className="block py-3.5 text-small font-semibold uppercase tracking-[0.06em] text-ink">
+                {t.footer.links.account}
+              </Link>
+            </li>
+          </ul>
         </div>
       )}
     </header>
@@ -144,7 +201,7 @@ export default function Navbar({ cartCount }: NavbarProps) {
 
 function CountBadge({ count }: { count: number }) {
   return (
-    <span className="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-accent-pink px-1 text-[10px] font-bold leading-none text-white">
+    <span className="absolute right-0.5 top-0.5 grid h-4 min-w-4 place-items-center rounded-full bg-accent-pink px-1 text-[10px] font-bold leading-none text-white">
       {count > 99 ? "99+" : count}
     </span>
   );

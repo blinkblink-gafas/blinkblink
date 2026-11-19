@@ -1,9 +1,15 @@
 import type { SortOption } from "@/types/filters";
-import type { FrameShape, ProductCategory, ProductGender } from "@/types/product";
+import type { FrameShape, ProductCategory } from "@/types/product";
 
 interface TitledText {
   title: string;
   subtitle: string;
+}
+
+/** A headline whose `accent` part is set in a colored italic ("Our *best-sellers*"). */
+export interface AccentHeading {
+  lead: string;
+  accent: string;
 }
 
 export interface LocaleStrings {
@@ -20,12 +26,14 @@ export interface LocaleStrings {
     remove: string;
     discount: string;
     home: string;
+    soldOut: string;
+    quickAdd: string;
   };
   navbar: {
     links: {
-      sunglasses: string;
-      eyeglasses: string;
-      sports: string;
+      men: string;
+      women: string;
+      classic: string;
       shopAll: string;
       about: string;
     };
@@ -45,28 +53,21 @@ export interface LocaleStrings {
       close: string;
     };
   };
+  /** Top announcement bar; `{amount}` and `{days}` come from storeConfig. */
+  announcement: string;
+  /** Scrolling strip under the hero; same placeholders as `announcement`. */
+  marquee: string[];
   /** Display names for every category slug, including the "all" listing. */
   categories: Record<"all" | ProductCategory, string>;
   hero: {
     heading: { lineOne: string; lineTwo: string };
     subtext: string;
     cta: string;
-    sticker: { lineOne: string; lineTwo: string };
-  };
-  trustBadges: {
-    trendyDesigns: TitledText;
-    uvProtection: TitledText;
-    premiumQuality: TitledText;
-    freeDelivery: TitledText;
   };
   shopByCategory: {
-    heading: string;
+    heading: AccentHeading;
     viewAll: string;
-    categories: {
-      sunglasses: { name: string; description: string };
-      eyeglasses: { name: string; description: string };
-      sports: { name: string; description: string };
-    };
+    descriptions: Record<ProductCategory, string>;
   };
   productBadges: {
     New: string;
@@ -75,7 +76,18 @@ export interface LocaleStrings {
     Limited: string;
   };
   bestSellers: {
-    heading: string;
+    heading: AccentHeading;
+  };
+  newIn: {
+    heading: AccentHeading;
+  };
+  carousel: {
+    previous: string;
+    next: string;
+  };
+  editorial: {
+    lineOne: string;
+    lineTwo: string;
   };
   promo: {
     heading: { lineOne: string; lineTwo: string };
@@ -111,8 +123,6 @@ export interface LocaleStrings {
     frameColor: string;
     lensColor: string;
     frameShape: string;
-    gender: string;
-    genders: Record<ProductGender, string>;
     availability: string;
     inStock: string;
     clear: string;
@@ -122,6 +132,7 @@ export interface LocaleStrings {
     showResults: string;
     noResultsHeading: string;
     noResultsMessage: string;
+    filterAndSort: string;
   };
   pagination: {
     label: string;
@@ -130,15 +141,15 @@ export interface LocaleStrings {
     page: string;
   };
   productPage: {
-    frameColor: string;
+    colorLabel: string;
+    lensLabel: string;
     quantityLabel: string;
     reviewsLabel: string;
     decreaseQuantity: string;
     increaseQuantity: string;
-    relatedHeading: string;
+    relatedHeading: AccentHeading;
     youSave: string;
-    showImage: string;
-    tabs: { details: string; shipping: string; returns: string };
+    sections: { description: string; details: string; shipping: string; returns: string };
     shippingText: string;
     returnsText: string;
     trust: {
@@ -146,10 +157,6 @@ export interface LocaleStrings {
       easyReturns: TitledText;
       secureCheckout: TitledText;
     };
-  };
-  brighterSide: {
-    heading: { lineOne: string; lineTwo: string; lineThree: string };
-    cta: string;
   };
   cart: {
     heading: string;
